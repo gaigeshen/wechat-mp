@@ -3,7 +3,7 @@ package me.gaigeshen.wechat.mp.message;
 import lombok.Getter;
 
 /**
- * 消息
+ * 接收普通消息
  *
  * @author gaigeshen
  */
