@@ -15,5 +15,4 @@ public class Config {
   private String secret;
   private String token;
   private String encodingAesKey;
-  private MessageEncryptionType messageEncryptionType;
 }

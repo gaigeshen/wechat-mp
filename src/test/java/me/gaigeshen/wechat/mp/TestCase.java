@@ -31,7 +31,6 @@ public class TestCase {
             .secret(props.getProperty("secret"))
             .token(props.getProperty("token"))
             .encodingAesKey(props.getProperty("encodingAesKey"))
-            .messageEncryptionType(MessageEncryptionType.valueOf(props.getProperty("messageEncryptionType")))
             .build();
     this.executor = new RequestExecutor(new HttpClientExecutor(2000, 2000, 3000), config);
   }
