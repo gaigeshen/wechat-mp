@@ -16,6 +16,9 @@ public class NewsReplyMessage implements ReplyMessage {
   @XStreamAlias(("Articles"))
   private Item[] items;
 
+  @XStreamAlias("ArticleCount")
+  private int articleCount;
+
   @XStreamAlias("item")
   @AllArgsConstructor
   public static class Item {
