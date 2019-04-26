@@ -1,9 +1,9 @@
-package me.gaigeshen.wechat.mp.message;
+package me.gaigeshen.wechat.mp.message.eventpush;
 
 /**
  * @author gaigeshen
  */
-public class ClickEvent extends AbstractEvent {
+public class ViewEvent extends AbstractEvent {
   private String eventKey;
 
   public String getEventKey() {

@@ -13,10 +13,14 @@ public class ServletReplyMessageResponse extends AbstractReplyMessageResponse {
 
   private final HttpServletResponse response;
 
-  public ServletReplyMessageResponse(Config config, HttpServletResponse response) {
+  private ServletReplyMessageResponse(Config config, HttpServletResponse response) {
     super(config);
     Validate.notNull(response, "response is required");
     this.response = response;
+  }
+
+  public static ServletReplyMessageResponse create(Config config, HttpServletResponse response) {
+    return new ServletReplyMessageResponse(config, response);
   }
 
   @Override

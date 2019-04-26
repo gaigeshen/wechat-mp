@@ -1,4 +1,4 @@
-package me.gaigeshen.wechat.mp.message;
+package me.gaigeshen.wechat.mp.message.eventpush;
 
 /**
  * @author gaigeshen
