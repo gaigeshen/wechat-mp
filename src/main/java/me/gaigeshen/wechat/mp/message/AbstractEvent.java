@@ -3,35 +3,26 @@ package me.gaigeshen.wechat.mp.message;
 /**
  * @author gaigeshen
  */
-public abstract class AbstractMessage implements Message {
+public abstract class AbstractEvent implements Event {
   private String toUserName;
   private String fromUserName;
   private Long createTime;
-  private String msgType;
-  private Long msgId;
+  private String event;
 
   @Override
   public String getToUserName() {
     return toUserName;
   }
-
   @Override
   public String getFromUserName() {
     return fromUserName;
   }
-
   @Override
   public Long getCreateTime() {
     return createTime;
   }
-
   @Override
-  public String getMsgType() {
-    return msgType;
-  }
-
-  @Override
-  public Long getMsgId() {
-    return msgId;
+  public String getEvent() {
+    return event;
   }
 }

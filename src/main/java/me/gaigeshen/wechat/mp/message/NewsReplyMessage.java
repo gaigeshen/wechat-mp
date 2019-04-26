@@ -2,16 +2,12 @@ package me.gaigeshen.wechat.mp.message;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 
 /**
- * 回复图文消息
- *
  * @author gaigeshen
  */
 @XStreamAlias("xml")
-@Builder
-public class NewsReplyMessage implements ReplyMessage {
+public class NewsReplyMessage extends AbstractReplyMessage {
 
   @XStreamAlias(("Articles"))
   private Item[] items;
@@ -26,5 +22,13 @@ public class NewsReplyMessage implements ReplyMessage {
     @XStreamAlias("Description") private String description;
     @XStreamAlias("PicUrl") private String picUrl;
     @XStreamAlias("Url") private String url;
+  }
+
+  public NewsReplyMessage(String toUserName, String fromUserName, Item... items) {
+    super(toUserName, fromUserName, "news");
+    if (items != null) {
+      this.items = items;
+      this.articleCount = items.length;
+    }
   }
 }

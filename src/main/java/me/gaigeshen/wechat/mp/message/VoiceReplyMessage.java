@@ -2,16 +2,12 @@ package me.gaigeshen.wechat.mp.message;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 
 /**
- * 回复语音消息
- *
  * @author gaigeshen
  */
 @XStreamAlias("xml")
-@Builder
-public class VoiceReplyMessage implements ReplyMessage {
+public class VoiceReplyMessage extends AbstractReplyMessage {
 
   @XStreamAlias(("Voice"))
   private Voice voice;
@@ -19,5 +15,10 @@ public class VoiceReplyMessage implements ReplyMessage {
   @AllArgsConstructor
   public static class Voice {
     @XStreamAlias("MediaId") private String mediaId;
+  }
+
+  public VoiceReplyMessage(String toUserName, String fromUserName, Voice voice) {
+    super(toUserName, fromUserName, "voice");
+    this.voice = voice;
   }
 }

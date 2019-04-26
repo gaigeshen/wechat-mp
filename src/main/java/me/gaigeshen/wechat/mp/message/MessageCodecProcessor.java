@@ -17,7 +17,7 @@ import java.util.Arrays;
  *
  * @author gaigeshen
  */
-final class MessageBodyCodecProcessor {
+final class MessageCodecProcessor {
   private final Config config;
   private final byte[] encodingAesKey;
 
@@ -26,7 +26,7 @@ final class MessageBodyCodecProcessor {
    *
    * @param config 配置
    */
-  MessageBodyCodecProcessor(Config config) {
+  MessageCodecProcessor(Config config) {
     Validate.notNull(config, "config is required");
     this.config = config;
     this.encodingAesKey = Base64.decodeBase64(config.getEncodingAesKey() + "=");
@@ -39,7 +39,7 @@ final class MessageBodyCodecProcessor {
    * @param validateMessageTo 是否需要校验消息接收者，密文里面表达的消息接收者必须与当前配置的应用编号是否需要相同
    * @return 得到解密后的内容
    */
-  public String decrypt(String encrypted, boolean validateMessageTo) {
+  String decrypt(String encrypted, boolean validateMessageTo) {
     byte[] decryptedBytes = decryptInternal(encrypted, encodingAesKey);
     int pad = decryptedBytes[decryptedBytes.length - 1];
     if (pad < 1 || pad > 32) {
@@ -66,7 +66,7 @@ final class MessageBodyCodecProcessor {
    * @param plainMessageBody 未加密的消息内容
    * @return 得到加密后的内容
    */
-  public String encrypt(String plainMessageBody) {
+  String encrypt(String plainMessageBody) {
     byte[] random = RandomStringUtils.randomAlphanumeric(16).getBytes();
     byte[] bodyBytes = plainMessageBody.getBytes();
     int bodyBytesLength = bodyBytes.length;

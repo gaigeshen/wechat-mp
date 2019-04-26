@@ -2,16 +2,12 @@ package me.gaigeshen.wechat.mp.message;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 
 /**
- * 回复图片消息
- *
  * @author gaigeshen
  */
 @XStreamAlias("xml")
-@Builder
-public class ImageReplyMessage implements ReplyMessage {
+public class ImageReplyMessage extends AbstractReplyMessage {
 
   @XStreamAlias(("Image"))
   private Image image;
@@ -19,5 +15,10 @@ public class ImageReplyMessage implements ReplyMessage {
   @AllArgsConstructor
   public static class Image {
     @XStreamAlias("MediaId") private String mediaId;
+  }
+
+  public ImageReplyMessage(String toUserName, String fromUserName, Image image) {
+    super(toUserName, fromUserName, "image");
+    this.image = image;
   }
 }
