@@ -13,14 +13,14 @@ public class NetworkCheckResponse extends AbstractResponse {
   private Dns[] dns;
   private Ping[] ping;
   @Getter
-  public class Dns {
+  public static class Dns {
     @JSONField(name = "ip")
     private String ip;
     @JSONField(name = "real_operator")
     private String realOperator;
   }
   @Getter
-  public class Ping {
+  public static class Ping {
     @JSONField(name = "ip")
     private String ip;
     @JSONField(name = "from_operator")
