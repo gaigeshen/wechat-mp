@@ -3,7 +3,7 @@ package me.gaigeshen.wechat.mp.message.eventpush;
 /**
  * @author gaigeshen
  */
-public class ClickEvent extends AbstractEvent {
+public class ClickEventMessage extends AbstractEventMessage {
   private String eventKey;
 
   public String getEventKey() {

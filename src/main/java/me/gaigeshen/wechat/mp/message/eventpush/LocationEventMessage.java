@@ -3,7 +3,7 @@ package me.gaigeshen.wechat.mp.message.eventpush;
 /**
  * @author gaigeshen
  */
-public class LocationEvent extends AbstractEvent {
+public class LocationEventMessage extends AbstractEventMessage {
   private Double latitude;
   private Double longitude;
   private Double precision;

@@ -1,9 +1,18 @@
 package me.gaigeshen.wechat.mp.message;
 
+import me.gaigeshen.wechat.mp.message.eventpush.*;
+
 /**
  * @author gaigeshen
  */
 public enum MessageTypeDeclarer {
+
+  EVENT_CLICK("CLICK", ClickEventMessage.class),
+  EVENT_LOCATION("LOCATION", LocationEventMessage.class),
+  EVENT_SCAN("SCAN", ScanEventMessage.class),
+  EVENT_SUBSCRIBE("subscribe", SubscribeEventMessage.class),
+  EVENT_VIEW("VIEW", ViewEventMessage.class),
+
   TEXT("text", TextMessage.class),
   IMAGE("image", ImageMessage.class),
   VOICE("voice", VoiceMessage.class),
@@ -12,7 +21,9 @@ public enum MessageTypeDeclarer {
   LOCATION("location", LocationMessage.class),
   LINK("link", LinkMessage.class);
 
+  // 注意类型名称不能重复
   private String typeName;
+  // 类型名称对应的消息类型
   private Class<? extends Message> messageClass;
 
   MessageTypeDeclarer(String typeName, Class<? extends Message> messageClass) {

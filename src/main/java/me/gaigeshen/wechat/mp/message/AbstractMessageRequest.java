@@ -15,6 +15,7 @@ import java.io.StringReader;
 public abstract class AbstractMessageRequest implements MessageRequest {
 
   private static final String MSG_TYPE_FIELD = "//MsgType";
+  private static final String MSG_EVENT_TYPE_FIELD = "//Event";
   private static final String MSG_ENCRYPT_FIELD = "//Encrypt";
 
   private final Config config;
@@ -24,6 +25,8 @@ public abstract class AbstractMessageRequest implements MessageRequest {
   private final String messageBody;
 
   private final Document messageBodyDocument;
+
+  private Message message;
 
   private String encryptType;
   private String sign;
@@ -51,12 +54,33 @@ public abstract class AbstractMessageRequest implements MessageRequest {
   }
 
   @Override
-  public final Message getMessage() {
-    Element node = (Element) messageBodyDocument.selectSingleNode(MSG_TYPE_FIELD);
-    Validate.notNull(node, "Unable to determine message type from: " + messageBodyDocument);
-    return MessageRequestXmlUtils.parseToObject(
-            messageBodyDocument,
-            MessageTypeDeclarer.messageClassFromName(node.getTextTrim()));
+  public final synchronized Message getMessage() {
+    if (message == null) {
+      // 取消息类型
+      Element node = (Element) messageBodyDocument.selectSingleNode(MSG_TYPE_FIELD);
+      Validate.notNull(node, "Unable to determine message type from: " + messageBodyDocument);
+      String messageType = node.getTextTrim();
+      if (isEventMessageType(messageType)) {
+        // 如果消息类型是事件推送
+        // 则继续取事件类型
+        node = (Element) messageBodyDocument.selectSingleNode(MSG_EVENT_TYPE_FIELD);
+        Validate.notNull(node, "Unable to determine event type from: " + messageBodyDocument);
+        messageType = node.getTextTrim();
+      }
+      // 得到的消息类型可能为事件类型，也有可能是普通消息类型
+      message = MessageRequestXmlUtils.parseToObject(messageBodyDocument, MessageTypeDeclarer.messageClassFromName(messageType));
+    }
+    return message;
+  }
+
+  /**
+   * 判断消息类型是否是事件类型，事件类型也属于消息类型
+   *
+   * @param messageType 消息类型
+   * @return 是否是事件类型
+   */
+  private boolean isEventMessageType(String messageType) {
+    return "event".equals(messageType);
   }
 
   private Document parseToDocument(String messageBody) throws DocumentException {
