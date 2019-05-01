@@ -6,18 +6,23 @@ import me.gaigeshen.wechat.mp.accesstoken.AccessTokenResponse;
 import me.gaigeshen.wechat.mp.commons.HttpClientExecutor;
 import me.gaigeshen.wechat.mp.commons.HttpMethod;
 import me.gaigeshen.wechat.mp.commons.JsonUtils;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.http.client.fluent.ContentResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.AbstractResponseHandler;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.charset.Charset;
+import java.util.stream.Stream;
 
 /**
  * 请求执行器
@@ -108,34 +113,6 @@ public class RequestExecutor implements Closeable {
   }
 
   /**
-   * 内部执行请求方法
-   *
-   * @param request 请求对象
-   * @param handler 请求结果处理器
-   * @param <R> 结果类型
-   * @return 将请求结果转换为指定的结果类型的对象
-   */
-  private <R> R doExecuteInternal(Request<?> request, AbstractResponseHandler<R> handler) {
-    HttpMethod httpMethod = request.httpMethod();
-    Validate.notNull(httpMethod, "Http method of this request %s is null", request);
-
-    String requestUri = request.requestUri();
-    Validate.notBlank(requestUri, "Request uri of this request %s is blank", request);
-
-    requestUri = replacePlaceholderForQueryString(requestUri);
-
-    HttpUriRequest httpReq = httpMethod.equals(HttpMethod.GET)
-            ? new HttpGet(requestUri)
-            : new HttpPost(requestUri);
-
-    // 是否需要设置请求体
-    if (httpMethod.equals(HttpMethod.POST)) {
-      ((HttpPost) httpReq).setEntity(new StringEntity(JsonUtils.toJson(request), "utf-8"));
-    }
-    return executor.execute(httpReq, handler);
-  }
-
-  /**
    * 执行请求
    *
    * @param request 请求对象
@@ -143,13 +120,47 @@ public class RequestExecutor implements Closeable {
    * @return 响应
    */
   public <R extends Response> R execute(Request<R> request) {
-    // Response type cannot be null
+    HttpMethod httpMethod = request.httpMethod();
+    Validate.notNull(httpMethod, "Http method of this request %s is null", request);
+    String requestUri = request.requestUri();
+    Validate.notBlank(requestUri, "Request uri of this request %s is blank", request);
     Class<R> responseType = request.responseType();
     Validate.notNull(responseType, "Response type of this request %s is null", request);
-    // Response content is string as utf-8
-    String result = doExecuteInternal(request, RESPONSE_HANDLER).asString(Charset.forName("utf-8"));
+
+    HttpUriRequest httpReq = httpMethod.equals(HttpMethod.GET)
+            ? new HttpGet(replacePlaceholderForQueryString(requestUri))
+            : new HttpPost(replacePlaceholderForQueryString(requestUri));
+    if (httpMethod.equals(HttpMethod.POST)) {
+      Field[] fields = FieldUtils.getAllFields(request.getClass());
+      boolean uploadable = Stream.of(fields).anyMatch(f -> ClassUtils.isAssignable(f.getType(), UploadItem.class));
+      if (!uploadable) {
+        ((HttpPost) httpReq).setEntity(new StringEntity(JsonUtils.toJson(request), "utf-8"));
+      } else {
+        processUploadable(request, fields, (HttpPost) httpReq);
+      }
+    }
+
+    String result = executor.execute(httpReq, RESPONSE_HANDLER).asString(Charset.forName("utf-8"));
     log.debug("Execute result is: {}", result);
-    // Json format string
+
     return JsonUtils.fromJson(result, responseType);
+  }
+
+  private void processUploadable(Request<?> request, Field[] fields, HttpPost httpReq) {
+    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+    try {
+      for (Field field : fields) {
+        field.setAccessible(true);
+        if (ClassUtils.isAssignable(field.getType(), UploadItem.class)) {
+          UploadItem item = (UploadItem) field.get(request);
+          builder.addBinaryBody(field.getName(), item.getContent(), ContentType.DEFAULT_BINARY, item.getFilename());
+        } else {
+          builder.addTextBody(field.getName(), String.valueOf(field.get(request)), ContentType.DEFAULT_TEXT.withCharset("utf-8"));
+        }
+      }
+    } catch (IllegalAccessException e) {
+      throw new IllegalStateException("Could not build multipart entity from request: " + request, e);
+    }
+    httpReq.setEntity(builder.build());
   }
 }

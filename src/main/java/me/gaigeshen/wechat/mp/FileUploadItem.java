@@ -1,0 +1,35 @@
+package me.gaigeshen.wechat.mp;
+
+import org.apache.commons.lang3.Validate;
+
+import java.io.*;
+
+/**
+ * 文件上传项目
+ *
+ * @author gaigeshen
+ */
+public class FileUploadItem extends UploadItem {
+  private final byte[] overrideContent;
+  public FileUploadItem(String filename, File file) {
+    super(filename, null);
+    Validate.notBlank(filename, "filename is required");
+    Validate.notNull(file, "file is required");
+    ByteArrayOutputStream bout = new ByteArrayOutputStream();
+    try (InputStream in = new FileInputStream(file)) {
+      byte[] buffer =  new byte[2048];
+      int len;
+      while ((len = in.read(buffer)) > 0) {
+        bout.write(buffer, 0, len);
+      }
+    } catch (IOException e) {
+      throw new IllegalStateException("Could not read data content from file: " + file, e);
+    }
+    this.overrideContent = bout.toByteArray();
+  }
+
+  @Override
+  public byte[] getContent() {
+    return overrideContent;
+  }
+}

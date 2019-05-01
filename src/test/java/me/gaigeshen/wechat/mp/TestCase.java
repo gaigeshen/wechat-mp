@@ -4,12 +4,13 @@ import me.gaigeshen.wechat.mp.accesstoken.AccessTokenRequest;
 import me.gaigeshen.wechat.mp.accesstoken.AccessTokenResponse;
 import me.gaigeshen.wechat.mp.commons.HttpClientExecutor;
 import me.gaigeshen.wechat.mp.menu.*;
+import me.gaigeshen.wechat.mp.sendall.ImageUploadRequest;
+import me.gaigeshen.wechat.mp.sendall.ImageUploadResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -32,7 +33,7 @@ public class TestCase {
             .token(props.getProperty("token"))
             .encodingAesKey(props.getProperty("encodingAesKey"))
             .build();
-    this.executor = new RequestExecutor(new HttpClientExecutor(2000, 2000, 3000), config);
+    this.executor = new RequestExecutor(new HttpClientExecutor(2000, 2000, 5000), config);
   }
 
   @After
@@ -165,6 +166,20 @@ public class TestCase {
     MenuDeleteResponse resp = executor.execute(req);
     System.out.println("error code: " + resp.getErrorCode());
     System.out.println("error message: " + resp.getErrorMessage());
+  }
+
+  @Test
+  public void testUploadImageRequest() throws IOException { // 群发接口，上传图文消息内的图片
+    ImageUploadRequest req = ImageUploadRequest.builder()
+            // 拥有多种形式的上传项目
+            // 参考UploadItem的子类
+            .media(new FileUploadItem("avatar.jpg",
+                    new File("C:\\Users\\gaigeshen\\Pictures\\Saved Pictures\\avatar.jpg")))
+            .build();
+    ImageUploadResponse resp = executor.execute(req);
+    System.out.println("error code: " + resp.getErrorCode());
+    System.out.println("error message: " + resp.getErrorMessage());
+    System.out.println("url: " + resp.getUrl());
   }
 
 }
