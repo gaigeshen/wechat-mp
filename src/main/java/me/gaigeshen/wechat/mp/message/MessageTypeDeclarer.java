@@ -3,6 +3,8 @@ package me.gaigeshen.wechat.mp.message;
 import me.gaigeshen.wechat.mp.message.eventpush.*;
 
 /**
+ * 消息类型定义枚举，包含所有的消息类型，有普通消息和事件消息
+ *
  * @author gaigeshen
  */
 public enum MessageTypeDeclarer {

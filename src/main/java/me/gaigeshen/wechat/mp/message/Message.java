@@ -1,6 +1,8 @@
 package me.gaigeshen.wechat.mp.message;
 
 /**
+ * 消息
+ *
  * @author gaigeshen
  */
 public interface Message {

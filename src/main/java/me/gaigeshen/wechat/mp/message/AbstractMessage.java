@@ -1,6 +1,8 @@
 package me.gaigeshen.wechat.mp.message;
 
 /**
+ * 抽象消息
+ *
  * @author gaigeshen
  */
 public abstract class AbstractMessage implements Message {

@@ -1,16 +1,26 @@
 package me.gaigeshen.wechat.mp.message;
 
+import org.apache.commons.lang3.Validate;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 默认的消息处理器链
+ *
  * @author gaigeshen
  */
 public class DefaultMessageProcessorChain implements MessageProcessorChain {
   private final List<MessageProcessor> processors;
 
+  /**
+   * 创建默认的消息处理器链
+   *
+   * @param processors 需要处理器集合
+   */
   public DefaultMessageProcessorChain(List<MessageProcessor> processors) {
+    Validate.notNull(processors, "Processors is required");
     this.processors = processors;
   }
 
@@ -19,6 +29,9 @@ public class DefaultMessageProcessorChain implements MessageProcessorChain {
     new ProcessorChainInternal(processors).doProcess(message, response);
   }
 
+  /**
+   * @author gaigeshen
+   */
   private class ProcessorChainInternal implements MessageProcessorChain {
     private final List<? extends MessageProcessor> processors;
     private final int processorsCount;

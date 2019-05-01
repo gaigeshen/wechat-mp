@@ -1,6 +1,8 @@
 package me.gaigeshen.wechat.mp.message;
 
 /**
+ * 回复消息，需要回复的时候用到
+ *
  * @author gaigeshen
  */
 public interface ReplyMessage {

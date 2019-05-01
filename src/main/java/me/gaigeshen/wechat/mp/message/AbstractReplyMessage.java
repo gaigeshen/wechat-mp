@@ -3,6 +3,8 @@ package me.gaigeshen.wechat.mp.message;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
+ * 抽象回复消息
+ *
  * @author gaigeshen
  */
 public abstract class AbstractReplyMessage implements ReplyMessage {

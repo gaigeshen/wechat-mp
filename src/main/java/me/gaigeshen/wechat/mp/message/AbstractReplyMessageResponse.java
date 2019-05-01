@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.StringReader;
 
 /**
+ * 抽象回复消息响应
+ *
  * @author gaigeshen
  */
 public abstract class AbstractReplyMessageResponse implements ReplyMessageResponse {

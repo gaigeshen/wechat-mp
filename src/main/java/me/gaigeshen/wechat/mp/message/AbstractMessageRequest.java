@@ -10,6 +10,8 @@ import org.dom4j.io.SAXReader;
 import java.io.StringReader;
 
 /**
+ * 抽象消息请求
+ *
  * @author gaigeshen
  */
 public abstract class AbstractMessageRequest implements MessageRequest {

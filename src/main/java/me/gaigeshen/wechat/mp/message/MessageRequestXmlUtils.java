@@ -9,6 +9,8 @@ import java.lang.reflect.Field;
 
 /**
  *
+ * 消息请求体工具类，用于转换消息请求体的数据至指定的类型的消息对象
+ *
  * @author gaigeshen
  */
 final class MessageRequestXmlUtils {
