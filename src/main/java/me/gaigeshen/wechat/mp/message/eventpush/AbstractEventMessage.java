@@ -1,6 +1,8 @@
 package me.gaigeshen.wechat.mp.message.eventpush;
 
 /**
+ * 抽象事件消息
+ *
  * @author gaigeshen
  */
 public abstract class AbstractEventMessage implements EventMessage {

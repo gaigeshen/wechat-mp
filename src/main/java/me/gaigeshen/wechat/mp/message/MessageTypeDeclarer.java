@@ -11,6 +11,7 @@ public enum MessageTypeDeclarer {
   EVENT_LOCATION("LOCATION", LocationEventMessage.class),
   EVENT_SCAN("SCAN", ScanEventMessage.class),
   EVENT_SUBSCRIBE("subscribe", SubscribeEventMessage.class),
+  EVENT_UNSUBSCRIBE("unsubscribe", UnsubscribeEventMessage.class),
   EVENT_VIEW("VIEW", ViewEventMessage.class),
 
   TEXT("text", TextMessage.class),

@@ -1,6 +1,8 @@
 package me.gaigeshen.wechat.mp.message.eventpush;
 
 /**
+ * 上报地理位置事件
+ *
  * @author gaigeshen
  */
 public class LocationEventMessage extends AbstractEventMessage {

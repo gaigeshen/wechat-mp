@@ -1,6 +1,8 @@
 package me.gaigeshen.wechat.mp.message.eventpush;
 
 /**
+ * 扫描带参数二维码事件，已关注的情况下
+ *
  * @author gaigeshen
  */
 public class ScanEventMessage extends AbstractEventMessage {
