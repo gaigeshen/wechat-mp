@@ -16,6 +16,7 @@ public enum MessageTypeDeclarer {
   EVENT_UNSUBSCRIBE("unsubscribe", UnsubscribeEventMessage.class),
   EVENT_VIEW("VIEW", ViewEventMessage.class),
   EVENT_MASS_MESSAGE_RESULT("MASSSENDJOBFINISH", MassMessageResultEventMessage.class),
+  EVENT_TEMPLATE_RESULT("TEMPLATESENDJOBFINISH", TemplateResultEventMessage.class),
 
   TEXT("text", TextMessage.class),
   IMAGE("image", ImageMessage.class),
