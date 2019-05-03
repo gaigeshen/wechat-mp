@@ -38,11 +38,24 @@ public class TemplateSendRequest implements Request<TemplateSendResponse> {
    * @return 发送模板消息请求
    */
   public static TemplateSendRequest create(String user, String templateId) {
+    return create(user, templateId, null);
+  }
+
+  /**
+   * 创建发送模板消息的请求
+   *
+   * @param user 用户编号，即微信编号（openid）
+   * @param templateId 模板编号
+   * @param url 跳转链接，可不传
+   * @return 发送模板消息请求
+   */
+  public static TemplateSendRequest create(String user, String templateId, String url) {
     Validate.notBlank(user, "user is required");
     Validate.notBlank(templateId, "templateId is required");
     TemplateSendRequest request = new TemplateSendRequest();
     request.user = user;
     request.templateId = templateId;
+    request.url = url;
     return request;
   }
 
