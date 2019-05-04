@@ -77,7 +77,7 @@ public final class JsApiSignatureCalculator {
     if (!force && currentTimestamp < ticketExpiresAtTimestamp) {
       return;
     }
-    JsApiTcketResponse resp = executor.execute(new JsApiTcketRequest());
+    JsApiTicketResponse resp = executor.execute(new JsApiTicketRequest());
     if (resp.isSucceeded()) {
       ticket = resp.getTicket();
       // 过期时间往前推移五秒钟，考虑请求的时间

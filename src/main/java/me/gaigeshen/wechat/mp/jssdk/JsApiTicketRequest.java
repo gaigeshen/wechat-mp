@@ -6,10 +6,10 @@ import me.gaigeshen.wechat.mp.commons.HttpMethod;
 /**
  * @author gaigeshen
  */
-public class JsApiTcketRequest implements Request<JsApiTcketResponse> {
+public class JsApiTicketRequest implements Request<JsApiTicketResponse> {
   @Override
-  public Class<JsApiTcketResponse> responseType() {
-    return JsApiTcketResponse.class;
+  public Class<JsApiTicketResponse> responseType() {
+    return JsApiTicketResponse.class;
   }
   @Override
   public HttpMethod httpMethod() {

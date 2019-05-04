@@ -10,7 +10,7 @@ import me.gaigeshen.wechat.mp.AbstractResponse;
  * @author gaigeshen
  */
 @Getter
-public class JsApiTcketResponse extends AbstractResponse {
+public class JsApiTicketResponse extends AbstractResponse {
   @JSONField(name = "ticket")
   private String ticket;
   @JSONField(name = "expires_in")
