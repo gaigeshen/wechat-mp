@@ -15,7 +15,7 @@ public abstract class EventMessageProcessor implements MessageProcessor {
 
   @Override
   public void doProcess(Message message, ReplyMessageResponse response, MessageProcessorChain processorChain) throws IOException {
-    if (message instanceof EventMessage) {
+    if (message instanceof EventMessage && canHandle((EventMessage) message)) {
       doProcess((EventMessage) message); // 事件消息不需要回复
     } else {
       processorChain.doProcess(message, response);
@@ -28,5 +28,13 @@ public abstract class EventMessageProcessor implements MessageProcessor {
    * @param message 事件消息
    */
   protected abstract void doProcess(EventMessage message);
+
+  /**
+   * 返回是否处理该种类型的事件消息
+   *
+   * @param message 事件消息
+   * @return 是否处理该种类型的事件消息
+   */
+  protected abstract boolean canHandle(EventMessage message);
 
 }
