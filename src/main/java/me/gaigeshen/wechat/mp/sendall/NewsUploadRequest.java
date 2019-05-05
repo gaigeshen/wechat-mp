@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import me.gaigeshen.wechat.mp.Request;
 import me.gaigeshen.wechat.mp.commons.HttpMethod;
+import me.gaigeshen.wechat.mp.material.News;
 
 /**
  * 上传图文消息素材

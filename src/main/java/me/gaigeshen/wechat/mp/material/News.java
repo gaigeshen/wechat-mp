@@ -1,10 +1,10 @@
-package me.gaigeshen.wechat.mp.sendall;
+package me.gaigeshen.wechat.mp.material;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Builder;
 
 /**
- * 图文消息素材，准备上传
+ * 图文消息素材
  *
  * @author gaigeshen
  */

@@ -21,7 +21,7 @@ public class MassMessageSendRequest implements Request<MassMessageSendResponse> 
   @JSONField(name = "clientmsgid")
   private String clientMsgId; // 群发消息编号
   @JSONField(name = "filter")
-  private Filter filter; // 按标签发送
+  private Map<String, Object> filter; // 按标签发送
   @JSONField(name = "touser")
   private String[] users; // 按用户发送
 
@@ -54,12 +54,14 @@ public class MassMessageSendRequest implements Request<MassMessageSendResponse> 
   /**
    * 设置群发消息的筛选条件，如果此前已设置按用户发送，则调用此方法无效
    *
-   * @param filter 筛选条件
+   * @param tagId 筛选条件,用户标签
    * @return 当前的群发消息请求
    */
-  public MassMessageSendRequest filter(Filter filter) {
+  public MassMessageSendRequest filter(String tagId) {
     if (users == null) {
-      this.filter = filter;
+      if (filter == null) {
+        filter = MapBuilder.builder(2).put("tag_id", tagId).put("is_to_all", false).build();
+      }
     }
     return this;
   }
