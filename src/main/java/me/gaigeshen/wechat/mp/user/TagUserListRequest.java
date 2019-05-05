@@ -15,7 +15,7 @@ import me.gaigeshen.wechat.mp.commons.HttpMethod;
 @Builder
 public class TagUserListRequest implements Request<TagUserListResponse> {
   @JSONField(name = "tagid") private long tagId;
-  @JSONField(name = "next_openid") private String nextUser;
+  @JSONField(name = "next_openid") private String nextOpenid;
   @Override
   public Class<TagUserListResponse> responseType() {
     return TagUserListResponse.class;
