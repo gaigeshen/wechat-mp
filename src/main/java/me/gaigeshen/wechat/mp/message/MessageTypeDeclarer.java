@@ -17,6 +17,12 @@ public enum MessageTypeDeclarer {
   EVENT_VIEW("VIEW", ViewEventMessage.class),
   EVENT_MASS_MESSAGE_RESULT("MASSSENDJOBFINISH", MassMessageResultEventMessage.class),
   EVENT_TEMPLATE_RESULT("TEMPLATESENDJOBFINISH", TemplateResultEventMessage.class),
+  EVENT_QUALIFICATION_VERIFY_SUCCESS("qualification_verify_success", QualificationVerifySuccessEventMessage.class),
+  EVENT_QUALIFICATION_VERIFY_FAIL("qualification_verify_fail", QualificationVerifyFailEventMessage.class),
+  EVENT_NAMING_VERIFY_SUCCESS("naming_verify_success", NamingVerifySuccessEventMessage.class),
+  EVENT_NAMING_VERIFY_FAIL("naming_verify_fail", NamingVerifyFailEventMessage.class),
+  EVENT_ANNUAL_RENEW("annual_renew", AnnualRenewEventMessage.class),
+  EVENT_VERIFY_EXPIRED("verify_expired", VerifyExpiredEventMessage.class),
 
   TEXT("text", TextMessage.class),
   IMAGE("image", ImageMessage.class),
