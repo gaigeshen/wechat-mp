@@ -37,6 +37,6 @@ public class ServletMessageRequest extends AbstractMessageRequest {
   }
 
   private ServletMessageRequest(Config config, String timestamp, String nonce, String messageBody, String encryptType, String signature) {
-    super(config, timestamp, nonce, messageBody, encryptType, signature);
+    super(config, signature, timestamp, nonce, messageBody, encryptType);
   }
 }
