@@ -33,7 +33,7 @@ final class MessageRequestXmlUtils {
     for (Field field : fields) {
       field.setAccessible(true);
       String fieldName = field.getName();
-      Element node = (Element) document.selectSingleNode("//" + StringUtils.left(fieldName, 1) + fieldName.substring(1));
+      Element node = (Element) document.selectSingleNode("//" + StringUtils.left(fieldName, 1).toUpperCase() + fieldName.substring(1));
       if (node == null) {
         continue; // 可能不存在该字段
       }
