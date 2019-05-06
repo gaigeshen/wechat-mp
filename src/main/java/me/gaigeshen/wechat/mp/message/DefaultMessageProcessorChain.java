@@ -21,7 +21,8 @@ public class DefaultMessageProcessorChain implements MessageProcessorChain {
    */
   public DefaultMessageProcessorChain(List<MessageProcessor> processors) {
     Validate.notNull(processors, "Processors is required");
-    this.processors = processors;
+    this.processors = new ArrayList<>(processors);
+    this.processors.sort(MessageProcessor::compareTo);
   }
 
   @Override
