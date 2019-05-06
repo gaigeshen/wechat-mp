@@ -17,7 +17,7 @@ public class ServletMessageRequest extends AbstractMessageRequest {
     String timestamp = request.getParameter("timestamp");
     String nonce = request.getParameter("nonce");
     String encryptType = request.getParameter("encrypt_type");
-    String sign = request.getParameter("msg_signature");
+    String signature = request.getParameter("signature");
 
     ByteArrayOutputStream messageBodyBytes = new ByteArrayOutputStream();
     int len;
@@ -33,10 +33,10 @@ public class ServletMessageRequest extends AbstractMessageRequest {
 
     return new ServletMessageRequest(config, timestamp, nonce,
             new String(messageBodyBytes.toByteArray(), Charset.forName("utf-8")),
-            encryptType, sign);
+            encryptType, signature);
   }
 
-  private ServletMessageRequest(Config config, String timestamp, String nonce, String messageBody, String encryptType, String sign) {
-    super(config, timestamp, nonce, messageBody, encryptType, sign);
+  private ServletMessageRequest(Config config, String timestamp, String nonce, String messageBody, String encryptType, String signature) {
+    super(config, timestamp, nonce, messageBody, encryptType, signature);
   }
 }

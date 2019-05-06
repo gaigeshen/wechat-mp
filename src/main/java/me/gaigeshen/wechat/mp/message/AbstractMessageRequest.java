@@ -24,24 +24,32 @@ public abstract class AbstractMessageRequest implements MessageRequest {
 
   private final String timestamp;
   private final String nonce;
-  private final String messageBody;
+  private final String signature;
 
   private final Document messageBodyDocument;
 
   private Message message;
 
   private String encryptType;
-  private String sign;
 
-  protected AbstractMessageRequest(Config config, String timestamp, String nonce, String messageBody) {
+  protected AbstractMessageRequest(Config config, String signature, String timestamp, String nonce, String messageBody, String encryptType) {
+    this(config, signature, timestamp, nonce, messageBody);
+    this.encryptType = encryptType;
+  }
+
+  protected AbstractMessageRequest(Config config, String signature, String timestamp, String nonce, String messageBody) {
     Validate.notNull(config, "config is required");
+    Validate.notBlank(signature, "signature is requried");
     Validate.notBlank(timestamp, "timestamp is requried");
     Validate.notBlank(nonce, "nonce is requried");
     Validate.notBlank(messageBody, "messageBody is required");
+    if (!validateMessageSource(config, signature, timestamp, nonce)) {
+      throw new IllegalArgumentException("Invalid signature of message body: " + messageBody);
+    }
     this.config = config;
+    this.signature = signature;
     this.timestamp = timestamp;
     this.nonce = nonce;
-    this.messageBody = messageBody;
     try {
       this.messageBodyDocument = parseToDocument(messageBody);
     } catch (DocumentException e) {
@@ -49,10 +57,17 @@ public abstract class AbstractMessageRequest implements MessageRequest {
     }
   }
 
-  protected AbstractMessageRequest(Config config, String timestamp, String nonce, String messageBody, String encryptType, String sign) {
-    this(config, timestamp, nonce, messageBody);
-    this.encryptType = encryptType;
-    this.sign = sign;
+  /**
+   * 校验消息签名
+   *
+   * @param config 配置
+   * @param signature 待校验的签名
+   * @param timestamp 时间戳
+   * @param nonce 随机值
+   * @return 签名是否合法
+   */
+  private boolean validateMessageSource(Config config, String signature, String timestamp, String nonce) {
+    return MessageSourceValidator.validate(config.getToken(), signature, timestamp, nonce);
   }
 
   @Override
