@@ -14,7 +14,7 @@ import java.io.IOException;
 public abstract class EventMessageProcessor implements MessageProcessor {
 
   @Override
-  public void doProcess(Message message, ReplyMessageResponse response, MessageProcessorChain processorChain) throws IOException {
+  public final void doProcess(Message message, ReplyMessageResponse response, MessageProcessorChain processorChain) throws IOException {
     if (message instanceof EventMessage && canHandle((EventMessage) message)) {
       doProcess((EventMessage) message); // 事件消息不需要回复
     } else {
