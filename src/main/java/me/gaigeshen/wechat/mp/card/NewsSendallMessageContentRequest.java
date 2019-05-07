@@ -4,7 +4,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Builder;
 import lombok.Getter;
 import me.gaigeshen.wechat.mp.Request;
-import me.gaigeshen.wechat.mp.commons.HttpMethod;
 
 /**
  * 图文消息群发卡券
@@ -17,15 +16,7 @@ public class NewsSendallMessageContentRequest implements Request<NewsSendallMess
   @JSONField(name = "card_id")
   private String cardId;
   @Override
-  public Class<NewsSendallMessageContentResponse> responseType() {
-    return NewsSendallMessageContentResponse.class;
-  }
-  @Override
-  public HttpMethod httpMethod() {
-    return HttpMethod.POST;
-  }
-  @Override
   public String requestUri() {
-    return "https://api.weixin.qq.com/card/mpnews/gethtml?access_token=TOKEN";
+    return "https://api.weixin.qq.com/card/mpnews/gethtml?access_token=ACCESS_TOKEN";
   }
 }

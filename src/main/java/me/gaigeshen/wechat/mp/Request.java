@@ -6,22 +6,37 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
- * 请求，不同的请求类型实现此接口，该类型对象的所有字段的值将作为请求参数
+ * 请求，不同的请求类型实现此接口，该类型对象的所有字段的值将作为请求参数。如果需要自定义请求类型，请保证直接实现此接口，不要间接实现。
  *
  * @param <R> 限定的请求结果类型
  * @author gaigeshen
  */
 public interface Request<R extends Response> {
 
+  /**
+   * 帮助类，无须使用
+   *
+   * @author gaigeshen
+   */
   class Helper {
+    /**
+     * 获取指定类型实现的的参数化接口，且该接口为请求类型
+     *
+     * @param clazz 指定的类型
+     * @return 参数化接口
+     */
     private static ParameterizedType requestType(Class<?> clazz) {
-      Type superclass = clazz.getGenericSuperclass();
-      if (superclass instanceof ParameterizedType) {
-        if (((ParameterizedType) superclass).getRawType().equals(Request.class)) {
-          return (ParameterizedType) superclass;
+      Type[] genericInterfaces = clazz.getGenericInterfaces();
+      if (genericInterfaces != null) {
+        for (Type anInterface : genericInterfaces) {
+          if (anInterface instanceof ParameterizedType) {
+            if (((ParameterizedType) anInterface).getRawType().equals(Request.class)) {
+              return (ParameterizedType) anInterface;
+            }
+          }
         }
       }
-      return requestType((Class<?>) superclass);
+      throw new IllegalStateException("Invalid class declared of request: " + clazz);
     }
   }
 

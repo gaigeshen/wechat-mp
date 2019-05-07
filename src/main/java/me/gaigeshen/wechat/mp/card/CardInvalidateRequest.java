@@ -6,21 +6,21 @@ import lombok.Getter;
 import me.gaigeshen.wechat.mp.Request;
 
 /**
- * 更改卡券码
+ * 设置卡券失效
  *
  * @author gaigeshen
  */
 @Getter
 @Builder
-public class CodeUpdateRequest implements Request<CodeUpdateResponse> {
+public class CardInvalidateRequest implements Request<CardInvalidateResponse> {
   @JSONField(name = "code")
   private String code;
   @JSONField(name = "card_id")
   private String cardId;
-  @JSONField(name = "new_code")
-  private String newCode;
+  @JSONField(name = "reason")
+  private String reason;
   @Override
   public String requestUri() {
-    return "https://api.weixin.qq.com/card/code/update?access_token=ACCESS_TOKEN";
+    return "https://api.weixin.qq.com/card/code/unavailable?access_token=ACCESS_TOKEN";
   }
 }

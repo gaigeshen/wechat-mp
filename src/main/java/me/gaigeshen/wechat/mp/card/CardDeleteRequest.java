@@ -6,21 +6,17 @@ import lombok.Getter;
 import me.gaigeshen.wechat.mp.Request;
 
 /**
- * 更改卡券码
+ * 删除卡券
  *
  * @author gaigeshen
  */
 @Getter
 @Builder
-public class CodeUpdateRequest implements Request<CodeUpdateResponse> {
-  @JSONField(name = "code")
-  private String code;
+public class CardDeleteRequest implements Request<CardDeleteResponse> {
   @JSONField(name = "card_id")
   private String cardId;
-  @JSONField(name = "new_code")
-  private String newCode;
   @Override
   public String requestUri() {
-    return "https://api.weixin.qq.com/card/code/update?access_token=ACCESS_TOKEN";
+    return "https://api.weixin.qq.com/card/delete?access_token=ACCESS_TOKEN";
   }
 }

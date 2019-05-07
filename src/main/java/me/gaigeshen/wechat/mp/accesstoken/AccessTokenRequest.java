@@ -10,10 +10,6 @@ import me.gaigeshen.wechat.mp.commons.HttpMethod;
  */
 public class AccessTokenRequest implements Request<AccessTokenResponse> {
   @Override
-  public Class<AccessTokenResponse> responseType() {
-    return AccessTokenResponse.class;
-  }
-  @Override
   public HttpMethod httpMethod() {
     return HttpMethod.GET;
   }

@@ -2,7 +2,6 @@ package me.gaigeshen.wechat.mp.card;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import me.gaigeshen.wechat.mp.Request;
-import me.gaigeshen.wechat.mp.commons.HttpMethod;
 import me.gaigeshen.wechat.mp.commons.MapBuilder;
 
 import java.util.ArrayList;
@@ -90,15 +89,7 @@ public class QRCodeTicketCreateRequest implements Request<QRCodeTicketCreateResp
   }
 
   @Override
-  public Class<QRCodeTicketCreateResponse> responseType() {
-    return QRCodeTicketCreateResponse.class;
-  }
-  @Override
-  public HttpMethod httpMethod() {
-    return HttpMethod.POST;
-  }
-  @Override
   public String requestUri() {
-    return "https://api.weixin.qq.com/card/qrcode/create?access_token=TOKEN";
+    return "https://api.weixin.qq.com/card/qrcode/create?access_token=ACCESS_TOKEN";
   }
 }

@@ -3,7 +3,6 @@ package me.gaigeshen.wechat.mp.card;
 import lombok.Builder;
 import lombok.Getter;
 import me.gaigeshen.wechat.mp.Request;
-import me.gaigeshen.wechat.mp.commons.HttpMethod;
 
 import java.util.Map;
 
@@ -18,14 +17,6 @@ public class CardCreateRequest implements Request<CardCreateResponse> {
 
   private Map<String, Object> card;
 
-  @Override
-  public Class<CardCreateResponse> responseType() {
-    return CardCreateResponse.class;
-  }
-  @Override
-  public HttpMethod httpMethod() {
-    return HttpMethod.POST;
-  }
   @Override
   public String requestUri() {
     return "https://api.weixin.qq.com/card/create?access_token=ACCESS_TOKEN";
