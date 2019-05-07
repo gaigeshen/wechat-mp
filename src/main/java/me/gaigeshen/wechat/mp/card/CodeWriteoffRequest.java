@@ -1,4 +1,4 @@
-package me.gaigeshen.wechat.mp.card.writeoff;
+package me.gaigeshen.wechat.mp.card;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Builder;
@@ -7,26 +7,27 @@ import me.gaigeshen.wechat.mp.Request;
 import me.gaigeshen.wechat.mp.commons.HttpMethod;
 
 /**
- * 卡券状态查询
+ * 核销卡券
  *
  * @author gaigeshen
  */
 @Getter
 @Builder
-public class CodeStatusRequesr implements Request<CodeStatusResponse> {
-  @JSONField(name = "card_id") private String cardId;
+public class CodeWriteoffRequest implements Request<CodeWriteoffResponse> {
   @JSONField(name = "code") private String code;
-  @JSONField(name = "check_consume") private boolean checkConsume;
+  @JSONField(name = "card_id") private String cardId;
   @Override
-  public Class<CodeStatusResponse> responseType() {
-    return CodeStatusResponse.class;
+  public Class<CodeWriteoffResponse> responseType() {
+    return CodeWriteoffResponse.class;
   }
+
   @Override
   public HttpMethod httpMethod() {
     return HttpMethod.POST;
   }
+
   @Override
   public String requestUri() {
-    return "https://api.weixin.qq.com/card/code/get?access_token=TOKEN";
+    return "https://api.weixin.qq.com/card/code/consume?access_token=TOKEN";
   }
 }

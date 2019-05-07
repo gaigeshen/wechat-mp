@@ -1,4 +1,4 @@
-package me.gaigeshen.wechat.mp.card.writeoff;
+package me.gaigeshen.wechat.mp.card;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Getter;
