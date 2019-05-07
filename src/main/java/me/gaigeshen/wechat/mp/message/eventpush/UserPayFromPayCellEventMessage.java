@@ -10,7 +10,6 @@ public class UserPayFromPayCellEventMessage extends AbstractEventMessage {
   private String userCardCode;
   private Long transId;
   private Long locationId;
-  private String locationName;
   private Integer fee;
   private Integer originalFee;
 
@@ -28,10 +27,6 @@ public class UserPayFromPayCellEventMessage extends AbstractEventMessage {
 
   public Long getLocationId() {
     return locationId;
-  }
-
-  public String getLocationName() {
-    return locationName;
   }
 
   public Integer getFee() {
