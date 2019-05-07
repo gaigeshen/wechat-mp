@@ -23,6 +23,8 @@ public enum MessageTypeDeclarer {
   EVENT_NAMING_VERIFY_FAIL("naming_verify_fail", NamingVerifyFailEventMessage.class),
   EVENT_ANNUAL_RENEW("annual_renew", AnnualRenewEventMessage.class),
   EVENT_VERIFY_EXPIRED("verify_expired", VerifyExpiredEventMessage.class),
+  EVENT_POI_CHECK_NOTIFY("poi_check_notify", PoiCheckNotifyEventMessage.class),
+  EVENT_USER_PAY_FROM_PAY_CELL("user_pay_from_pay_cell", UserPayFromPayCellEventMessage.class),
 
   TEXT("text", TextMessage.class),
   IMAGE("image", ImageMessage.class),

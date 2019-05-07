@@ -6,6 +6,7 @@ import me.gaigeshen.wechat.mp.commons.HttpClientExecutor;
 import me.gaigeshen.wechat.mp.menu.*;
 import me.gaigeshen.wechat.mp.sendall.ImageUploadRequest;
 import me.gaigeshen.wechat.mp.sendall.ImageUploadResponse;
+import me.gaigeshen.wechat.mp.store.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -169,7 +170,7 @@ public class TestCase {
   }
 
   @Test
-  public void testUploadImageRequest() throws IOException { // 群发接口，上传图文消息内的图片
+  public void testUploadImageRequest() { // 群发接口，上传图文消息内的图片
     ImageUploadRequest req = ImageUploadRequest.builder()
             // 拥有多种形式的上传项目
             // 参考UploadItem的子类
@@ -182,4 +183,15 @@ public class TestCase {
     System.out.println("url: " + resp.getUrl());
   }
 
+  @Test
+  public void testStoreImageUploadRequest() { // 门店图片上传
+    StoreImageUploadRequest request = StoreImageUploadRequest.builder()
+            .buffer(new FileUploadItem("store2.jpg", new File("C:\\Users\\gaigeshen\\Pictures\\Saved Pictures\\store2.jpg")))
+            .build();
+    StoreImageUploadResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+    System.out.println("url: " + response.getUrl());
+  }
 }
+
