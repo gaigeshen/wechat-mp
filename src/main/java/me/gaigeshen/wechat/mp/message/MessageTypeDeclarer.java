@@ -36,6 +36,9 @@ public enum MessageTypeDeclarer {
   EVENT_CARD_SKU_REMIND("card_sku_remind", CardStockRemindEventMessage.class),
   EVENT_CARD_PAY_ORDER("card_pay_order", CardPayOrderEventMessage.class),
   EVENT_SUBMIT_MEMBERCARD_USER_INFO("submit_membercard_user_info", MemberCardSubmitUserInfoEventMessage.class),
+  EVENT_GIFTCARD_PAY_DONE("giftcard_pay_done", GiftCardPayDoneEventMessage.class),
+  EVENT_GIFTCARD_SEND_TO_FRIEND("giftcard_send_to_friend", GiftCardSendToFriendEventMessage.class),
+  EVENT_GIFTCARD_USER_ACCEPT("giftcard_user_accept", GiftCardUserAcceptEventMessage.class),
 
   TEXT("text", TextMessage.class),
   IMAGE("image", ImageMessage.class),

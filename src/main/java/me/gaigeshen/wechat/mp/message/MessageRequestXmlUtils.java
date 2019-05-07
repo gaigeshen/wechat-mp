@@ -57,6 +57,9 @@ final class MessageRequestXmlUtils {
       else if (ClassUtils.isAssignable(double.class, fieldType)) {
         field.set(target, Double.valueOf(value));
       }
+      else if (ClassUtils.isAssignable(boolean.class, fieldType)) {
+        field.set(target, Boolean.valueOf(value));
+      }
     } catch (IllegalAccessException e) {
       throw new IllegalStateException("Could not assign value to target field: " + field, e);
     }
