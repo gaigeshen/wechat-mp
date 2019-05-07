@@ -1,4 +1,4 @@
-package me.gaigeshen.wechat.mp.customerservice;
+package me.gaigeshen.wechat.mp.kefu;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Builder;
@@ -7,13 +7,13 @@ import me.gaigeshen.wechat.mp.Request;
 import me.gaigeshen.wechat.mp.commons.HttpMethod;
 
 /**
- * 获取所有的客服帐号
+ * 修改客服帐号
  *
  * @author gaigeshen
  */
 @Getter
 @Builder
-public class KefuAccountListRequest implements Request<KefuAccountAddResponse> {
+public class KefuAccountUpdateRequest implements Request<KefuAccountUpdateResponse> {
   @JSONField(name = "kf_account")
   private String account;
 
@@ -21,8 +21,8 @@ public class KefuAccountListRequest implements Request<KefuAccountAddResponse> {
   private String password;
 
   @Override
-  public Class<KefuAccountAddResponse> responseType() {
-    return KefuAccountAddResponse.class;
+  public Class<KefuAccountUpdateResponse> responseType() {
+    return KefuAccountUpdateResponse.class;
   }
 
   @Override
@@ -32,6 +32,6 @@ public class KefuAccountListRequest implements Request<KefuAccountAddResponse> {
 
   @Override
   public String requestUri() {
-    return "https://api.weixin.qq.com/customservice/kfaccount/add?access_token=ACCESS_TOKEN";
+    return "https://api.weixin.qq.com/customservice/kfaccount/update?access_token=ACCESS_TOKEN";
   }
 }

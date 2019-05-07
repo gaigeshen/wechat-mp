@@ -1,4 +1,4 @@
-package me.gaigeshen.wechat.mp.customerservice;
+package me.gaigeshen.wechat.mp.kefu;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Builder;

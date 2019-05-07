@@ -1,4 +1,4 @@
-package me.gaigeshen.wechat.mp.customerservice;
+package me.gaigeshen.wechat.mp.kefu;
 
 import lombok.Getter;
 import me.gaigeshen.wechat.mp.AbstractResponse;
