@@ -9,5 +9,5 @@ import me.gaigeshen.wechat.mp.AbstractResponse;
  * @author gaigeshen
  */
 @Getter
-public class BboardingpassUpdateResponse extends AbstractResponse {
+public class BoardingpassUpdateResponse extends AbstractResponse {
 }

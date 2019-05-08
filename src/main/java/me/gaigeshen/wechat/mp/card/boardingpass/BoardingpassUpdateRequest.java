@@ -10,7 +10,7 @@ import me.gaigeshen.wechat.mp.Request;
  * @author gaigeshen
  */
 @Builder
-public class BboardingpassUpdateRequest implements Request<BboardingpassUpdateResponse> {
+public class BoardingpassUpdateRequest implements Request<BoardingpassUpdateResponse> {
   @JSONField(name = "code") private String code;
   @JSONField(name = "card_id") private String cardId;
   @JSONField(name = "passenger_name") private String passengerName;
