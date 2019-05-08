@@ -13,9 +13,9 @@ import me.gaigeshen.wechat.mp.AbstractResponse;
 public class CodeWriteoffResponse extends AbstractResponse {
 
   private Card card;
+  private String openid;
 
   public static class Card {
     @JSONField(name = "card_id") private String cardId;
-    @JSONField(name = "openid") private String openid;
   }
 }
