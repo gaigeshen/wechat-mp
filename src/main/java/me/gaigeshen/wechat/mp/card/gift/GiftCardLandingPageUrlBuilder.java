@@ -1,5 +1,6 @@
 package me.gaigeshen.wechat.mp.card.gift;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -16,6 +17,7 @@ public class GiftCardLandingPageUrlBuilder {
   private final String pageId;
 
   private GiftCardLandingPageUrlBuilder(String pageId) {
+    Validate.notBlank(pageId, "pageId is required");
     this.pageId = pageId;
   }
 
