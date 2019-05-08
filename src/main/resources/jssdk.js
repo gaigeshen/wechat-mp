@@ -309,3 +309,33 @@ wx.openAddress({ // 共享收货地址接口
         var telNumber = res.telNumber; // 收货人手机号码
     }
 });
+
+// ==================== 卡券
+
+wx.chooseCard({ // 拉取适用卡券列表并获取用户选择信息
+    shopId: '', // 门店Id
+    cardType: '', // 卡券类型
+    cardId: '', // 卡券Id
+    timestamp: 0, // 卡券签名时间戳
+    nonceStr: '', // 卡券签名随机串
+    signType: '', // 签名方式，默认'SHA1'
+    cardSign: '', // 卡券签名
+    success: function (res) {
+        var cardList= res.cardList; // 用户选中的卡券列表信息
+    }
+});
+wx.addCard({ // 批量添加卡券
+    cardList: [{
+        cardId: '',
+        cardExt: ''
+    }], // 需要添加的卡券列表
+    success: function (res) {
+        var cardList = res.cardList; // 添加的卡券列表信息
+    }
+});
+wx.openCard({ // 查看微信卡包中的卡券接口
+    cardList: [{
+        cardId: '',
+        code: ''
+    }]// 需要打开的卡券列表
+});
