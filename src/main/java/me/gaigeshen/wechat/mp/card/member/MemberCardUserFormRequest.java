@@ -70,7 +70,7 @@ public class MemberCardUserFormRequest implements Request<MemberCardUserFormResp
   }
 
   @Builder
-  private class RichField {
+  private static class RichField {
     /**
      * 1. FORM_FIELD_RADIO<br>
      * 2. FORM_FIELD_SELECT<br>
@@ -81,12 +81,12 @@ public class MemberCardUserFormRequest implements Request<MemberCardUserFormResp
     private String[] values;
   }
   @Builder
-  private class ServiceStatement {
+  private static class ServiceStatement {
     private String name;
     private String url;
   }
   @Builder
-  private class BindOldCard {
+  private static class BindOldCard {
     private String name;
     private String url;
   }

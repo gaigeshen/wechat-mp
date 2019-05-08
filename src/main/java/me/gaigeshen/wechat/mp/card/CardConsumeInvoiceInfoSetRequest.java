@@ -73,14 +73,14 @@ public class CardConsumeInvoiceInfoSetRequest implements Request<CardConsumeInvo
   }
 
   @Builder
-  private class UserFields {
+  private static class UserFields {
     @JSONField(name = "auth_field") private boolean showTitle;
     @JSONField(name = "auth_field") private boolean showPhone;
     @JSONField(name = "auth_field") private boolean showEmail;
   }
 
   @Builder
-  private class CompanyFields {
+  private static class CompanyFields {
     @JSONField(name = "auth_field") private boolean showTitle;
     @JSONField(name = "auth_field") private boolean showTaxNo;
     @JSONField(name = "auth_field") private boolean showAddr;
