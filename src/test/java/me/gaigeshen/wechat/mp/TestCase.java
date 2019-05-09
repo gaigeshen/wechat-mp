@@ -7,11 +7,15 @@ import me.gaigeshen.wechat.mp.menu.*;
 import me.gaigeshen.wechat.mp.sendall.ImageUploadRequest;
 import me.gaigeshen.wechat.mp.sendall.ImageUploadResponse;
 import me.gaigeshen.wechat.mp.store.*;
+import me.gaigeshen.wechat.mp.store.miniapp.StoreMiniappCategoryRequest;
+import me.gaigeshen.wechat.mp.store.miniapp.StoreMiniappCategoryResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -233,6 +237,14 @@ public class TestCase {
     System.out.println("error code: " + response.getErrorCode());
     System.out.println("error message: " + response.getErrorMessage());
     System.out.println(Arrays.toString(response.getCategories()));
+  }
+
+  @Test
+  public void testStoreMiniappCategoryRequest() { // 获取门店小程序类目
+    StoreMiniappCategoryRequest request = new StoreMiniappCategoryRequest();
+    StoreMiniappCategoryResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
   }
 }
 
