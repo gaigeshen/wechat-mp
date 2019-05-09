@@ -1,6 +1,5 @@
 package me.gaigeshen.wechat.mp.message;
 
-import me.gaigeshen.wechat.mp.message.eventpush.KeyMappedMessage;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;

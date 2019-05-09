@@ -1,6 +1,4 @@
-package me.gaigeshen.wechat.mp.message.eventpush;
-
-import me.gaigeshen.wechat.mp.message.Message;
+package me.gaigeshen.wechat.mp.message;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,7 +8,7 @@ import java.util.Set;
 /**
  *
  * 所有未定义的消息类型都是此类型，内部采用映射数据结构来表达所有的消息数据。
- * 注意所有的消息数据都是字符串类型，使用者自己转换成相应的数据类型。
+ * 注意所有的消息数据都是字符串类型，并且字段名称未做任何更改，使用者自己转换成相应的数据类型。
  *
  * @author gaigeshen
  */
