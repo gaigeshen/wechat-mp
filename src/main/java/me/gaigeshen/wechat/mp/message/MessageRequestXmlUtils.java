@@ -32,8 +32,16 @@ final class MessageRequestXmlUtils {
     Field[] fields = FieldUtils.getAllFields(targetType);
     for (Field field : fields) {
       field.setAccessible(true);
-      String fieldName = field.getName();
-      Element node = (Element) document.selectSingleNode("//" + StringUtils.left(fieldName, 1).toUpperCase() + fieldName.substring(1));
+      String nodeNameValue = null;
+      NodeName nodeName = field.getAnnotation(NodeName.class);
+      if (nodeName != null) {
+        nodeNameValue = nodeName.value();
+      }
+      if (nodeNameValue == null) {
+        String fieldName = field.getName();
+        nodeNameValue = StringUtils.left(fieldName, 1).toUpperCase() + fieldName.substring(1);
+      }
+      Element node = (Element) document.selectSingleNode("//" + nodeNameValue);
       if (node == null) {
         continue; // 可能不存在该字段
       }
