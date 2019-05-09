@@ -246,5 +246,24 @@ public class TestCase {
     System.out.println("error code: " + response.getErrorCode());
     System.out.println("error message: " + response.getErrorMessage());
   }
+
+  @Test
+  public void testSemantic() { // 测试语义理解，注意此处的请求方式
+    // 此处的 EmptyDataResponse 仅仅是为了编译不报错，实际没有什么用处
+    // 使用了打印结果内容的结果处理器
+    executor.execute(new Request<EmptyDataResponse>() {
+      private String query = "查一下明天从北京到上海的南航机票";
+      private String city = "北京";
+      private String category = "flight,hotel";
+      private String appid = config.getAppid();
+      private String uid = "ocOGR0U4M7EbZEVpMKqR0yMGADSE";
+
+      @Override
+      public String requestUri() {
+        return "https://api.weixin.qq.com/semantic/semproxy/search?access_token=ACCESS_TOKEN";
+      }
+    }, new StringResponseBodyPrintHandler());
+  }
+
 }
 
