@@ -1,5 +1,6 @@
 package me.gaigeshen.wechat.mp.message;
 
+import me.gaigeshen.wechat.mp.message.eventpush.KeyMappedMessage;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -28,6 +29,13 @@ final class MessageRequestXmlUtils {
       response = targetType.newInstance();
     } catch (InstantiationException | IllegalAccessException e) {
       throw new IllegalStateException("Could not create new response object: " + targetType, e);
+    }
+    if (response instanceof KeyMappedMessage) { // 未定义的消息类型
+      Element rootElement = document.getRootElement();
+      for (Element element : rootElement.elements()) {
+        ((KeyMappedMessage) response).put(element.getName(), element.getTextTrim());
+      }
+      return response;
     }
     Field[] fields = FieldUtils.getAllFields(targetType);
     for (Field field : fields) {

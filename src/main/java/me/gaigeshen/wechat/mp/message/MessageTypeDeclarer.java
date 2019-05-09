@@ -9,6 +9,8 @@ import me.gaigeshen.wechat.mp.message.eventpush.*;
  */
 public enum MessageTypeDeclarer {
 
+  UNDEFINED("undefined", KeyMappedMessage.class),
+
   EVENT_CLICK("CLICK", ClickEventMessage.class),
   EVENT_LOCATION("LOCATION", LocationEventMessage.class),
   EVENT_SCAN("SCAN", ScanEventMessage.class),
@@ -41,6 +43,7 @@ public enum MessageTypeDeclarer {
   EVENT_GIFTCARD_USER_ACCEPT("giftcard_user_accept", GiftCardUserAcceptEventMessage.class),
   EVENT_USER_AUTHORIZE_INVOICE("user_authorize_invoice", UserAuthorizeInvoiceEventMessage.class),
   EVENT_APPLY_MERCHANT_AUDIT_INFO("apply_merchant_audit_info", ApplyMerchantAuditInfoEventMessage.class),
+  EVENT_CREATE_MAP_POI_AUDIT_INFO("create_map_poi_audit_info", CreateMapPoiAuditInfoEventMessage.class),
 
   TEXT("text", TextMessage.class),
   IMAGE("image", ImageMessage.class),
@@ -70,7 +73,7 @@ public enum MessageTypeDeclarer {
         return declarer;
       }
     }
-    throw new IllegalArgumentException("Invalid type name");
+    return UNDEFINED;
   }
 
   public String getTypeName() {

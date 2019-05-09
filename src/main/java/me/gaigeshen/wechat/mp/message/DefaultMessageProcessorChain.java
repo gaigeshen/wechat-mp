@@ -1,5 +1,6 @@
 package me.gaigeshen.wechat.mp.message;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.util.List;
  *
  * @author gaigeshen
  */
+@Slf4j
 public class DefaultMessageProcessorChain implements MessageProcessorChain {
   private final List<MessageProcessor> processors;
 
@@ -48,6 +50,7 @@ public class DefaultMessageProcessorChain implements MessageProcessorChain {
         @Override
         public void doProcess(Message message, ReplyMessageResponse response, MessageProcessorChain processorChain)
                 throws IOException {
+          log.info("Process message by default processor, message content: {}", message);
           response.write(ReplyMessage.BLANK);
         }
       });
