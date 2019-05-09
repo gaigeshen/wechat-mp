@@ -10,6 +10,7 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.ContentResponseHandler;
 import org.apache.http.client.methods.HttpGet;
@@ -19,8 +20,10 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.stream.Stream;
@@ -99,28 +102,34 @@ public class RequestExecutor implements Closeable {
   }
 
   /**
-   * 执行请求
+   * 执行请求，请求之后，假设响应体内容为字符串类型，然后将其转化为指定的类型的对象
    *
    * @param request 请求对象
    * @param <R> 响应类型
    * @return 响应
+   *
+   * @see #execute(Request, ResponseBodyHandler)
    */
   public <R extends Response> R execute(Request<R> request) {
     HttpUriRequest httpReq = buildRequest(request);
     String result = executor.execute(httpReq, RESPONSE_HANDLER).asString(Charset.forName("utf-8"));
+    logRequestAndResponse(httpReq, result);
     return JsonUtils.fromJson(result, request.responseType());
   }
 
   /**
-   * 执行请求
+   * 执行请求，如果响应体内容是字符串类型，请不要调用此方法
    *
    * @param request 请求对象
    * @param handler 请求结果处理器，由用户决定怎么处理结果，常用于下载类的请求
+   *
+   * @see #execute(Request)
    */
   public void execute(Request<?> request, ResponseBodyHandler handler) {
     Validate.notNull(handler, "handler is required");
     HttpUriRequest httpReq = buildRequest(request);
     Content content = executor.execute(httpReq, RESPONSE_HANDLER);
+    logRequestAndResponse(httpReq, null);
     handler.handle(content.getType().toString(), content.asBytes());
   }
 
@@ -139,7 +148,8 @@ public class RequestExecutor implements Closeable {
       Field[] fields = FieldUtils.getAllFields(request.getClass());
       boolean uploadable = Stream.of(fields).anyMatch(f -> ClassUtils.isAssignable(f.getType(), UploadItem.class));
       if (!uploadable) {
-        ((HttpPost) httpReq).setEntity(new StringEntity(JsonUtils.toJson(request), "utf-8"));
+        String entity = JsonUtils.toJson(request);
+        ((HttpPost) httpReq).setEntity(new StringEntity(entity, "utf-8"));
       } else {
         processUploadable(request, fields, (HttpPost) httpReq);
       }
@@ -163,6 +173,40 @@ public class RequestExecutor implements Closeable {
       throw new IllegalStateException("Could not build multipart entity from request: " + request, e);
     }
     httpReq.setEntity(builder.build());
+  }
+
+  /**
+   * 打印请求和响应日志，响应内容必须是字符串类型，如果是下载类的请求，则响应内容参数传递空对象。
+   * 请求发送的数据如果是字符串类型才会打印出来。
+   *
+   * @param httpReq 请求对象
+   * @param result 响应字符串对象，可不传递
+   */
+  private void logRequestAndResponse(HttpUriRequest httpReq, String result) {
+    StringBuilder builder = new StringBuilder();
+    builder.append(httpReq);
+    if (httpReq instanceof HttpPost) {
+      HttpEntity entity = ((HttpPost) httpReq).getEntity();
+      if (entity instanceof StringEntity) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] buff = new byte[2048];
+        int len;
+        try (InputStream in = ((StringEntity) entity).getContent()) {
+          while ((len = in.read(buff)) > 0) {
+            out.write(buff, 0, len);
+          }
+        } catch (IOException e) {
+          throw new IllegalStateException(e);
+        }
+        builder.append("\n<< ENTITY >> ").append(out);
+      }
+    }
+    if (StringUtils.isNotBlank(result)) {
+      builder.append("\n<< RESULT >> ").append(result);
+    } else {
+      builder.append("\n<< RESULT >> No printable result");
+    }
+    log.debug(builder.toString());
   }
 
   /**
