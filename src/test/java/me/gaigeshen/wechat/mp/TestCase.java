@@ -186,12 +186,53 @@ public class TestCase {
   @Test
   public void testStoreImageUploadRequest() { // 门店图片上传
     StoreImageUploadRequest request = StoreImageUploadRequest.builder()
-            .buffer(new FileUploadItem("store2.jpg", new File("C:\\Users\\gaigeshen\\Pictures\\Saved Pictures\\store2.jpg")))
+            .buffer(new FileUploadItem("store1.jpg", new File("C:\\Users\\gaigeshen\\Pictures\\Saved Pictures\\store1.jpg")))
             .build();
     StoreImageUploadResponse response = executor.execute(request);
     System.out.println("error code: " + response.getErrorCode());
     System.out.println("error message: " + response.getErrorMessage());
     System.out.println("url: " + response.getUrl());
+  }
+
+  @Test
+  public void testStoreCreateRequest() { // 创建门店
+    StoreCreateRequest request = StoreCreateRequest.create(StoreCreateRequest.baseInfoBuilder()
+            .sid("sidabc123")
+            .businessName("这是门店名称")
+            .branchName("这是分店名称")
+            .province("浙江省")
+            .city("杭州市")
+            .district("余杭区")
+            .address("文一西路海创科技中心")
+            .telephone("0571-88888888")
+            .categories(new String[]{ "美食", "火锅" })
+            .offsetType(1)
+            .longitude(119.99563)
+            .latitude(30.275415)
+            .recommend("麦辣鸡腿堡套餐，麦乐鸡，全家桶")
+            .special("免费wifi，大保健")
+            .introduction("全球大型跨国连锁餐厅")
+            .openTime("8:00-21:00")
+            .avgPrice(99)
+            // 通过门店图片上传接口获得的图片链接地址
+            .photoUrls(StoreCreateRequest.createPhotoUrls(new String[]{
+                    "http://mmbiz.qpic.cn/mmbiz_jpg/Zf3PN4ib2cdSof936uIfecrrtmtjVDHgPVjNeicq4Mgom37hpSEJyfFv1FxFBfHsNsxtzoqTrGxOaeiadxOw0eQpg/0",
+                    "http://mmbiz.qpic.cn/mmbiz_jpg/Zf3PN4ib2cdSof936uIfecrrtmtjVDHgPjsib9DlTKvAWOomHcRJgodgRoxMlecOYdgbGibTnTHGhmHKXCiaibiaSFpQ/0"
+            }))
+            .build());
+    StoreCreateResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+    System.out.println("poi id: " + response.getPoiId());
+  }
+
+  @Test
+  public void testStoreCategoryRequest() { // 查询门店类目
+    StoreCategoryRequest request = new StoreCategoryRequest();
+    StoreCategoryResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+    System.out.println(Arrays.toString(response.getCategories()));
   }
 }
 
