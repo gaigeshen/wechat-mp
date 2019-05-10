@@ -28,6 +28,8 @@ public class YourResponse extends AbstractResponse {
 }
 // 自定义实现请求接口
 public class YourRequest implements Request<YourResponse> {
+  // 这里是定义请求的数据字段
+
   // 此处返回请求方式，此方法有默认实现
   @Override
   public HttpMethod httpMethod() {
@@ -46,7 +48,7 @@ public class YourRequest implements Request<YourResponse> {
 public class YourUploadRequest implements Request<YourUploadResponse> {
   // 普通字段
   private String type;
-  // 此处的字段类型必须上传文件项目，字段名称对应接口文档的说明即可
+  // 此处的字段类型必须上传项目，字段名称对应接口文档的说明即可
   private UploadItem media;
   @Override
   public String requestUri() {
@@ -61,10 +63,10 @@ public class YourUploadRequest implements Request<YourUploadResponse> {
 // 请求类直接实现上传项目，此种类型的请求对象内的所有字段将被忽略
 public class YourUploadRequest implements Request<YourUploadResponse>, UploadItem {
   private final UploadItem item;
-  private YYYUploadRequest(UploadItem item) {
+  private YourUploadRequest(UploadItem item) {
     this.item = item;
   }
-  public static YYYUploadRequest create(UploadItem item) {
+  public static YourUploadRequest create(UploadItem item) {
     Validate.notNull(item, "Upload item is required");
     return new YYYUploadRequest(item);
   }
