@@ -51,7 +51,7 @@ public class RequestExecutor implements Closeable {
   public RequestExecutor(HttpClientExecutor executor, Config config) {
     this.executor = executor;
     this.config = config;
-    this.initializeAccessToken();
+    initializeAccessToken();
   }
 
   @Override
@@ -85,6 +85,7 @@ public class RequestExecutor implements Closeable {
       log.debug("Access token refresh succeeded");
     } else {
       log.debug("Access token refresh failed: " + resp.getErrorMessage());
+      throw new IllegalStateException("Could not refresh access token, because " + resp.getErrorMessage());
     }
   }
 
