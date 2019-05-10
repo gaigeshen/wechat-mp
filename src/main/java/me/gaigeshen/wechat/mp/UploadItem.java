@@ -5,20 +5,7 @@ package me.gaigeshen.wechat.mp;
  *
  * @author gaigeshen
  */
-public class UploadItem {
-  private String filename;
-  private byte[] content;
-
-  public UploadItem(String filename, byte[] content) {
-    this.filename = filename;
-    this.content = content;
-  }
-
-  public String getFilename() {
-    return filename;
-  }
-
-  public byte[] getContent() {
-    return content;
-  }
+public interface UploadItem {
+  String getFilename();
+  byte[] getContent();
 }

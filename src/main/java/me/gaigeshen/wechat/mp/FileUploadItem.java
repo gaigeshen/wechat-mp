@@ -9,7 +9,7 @@ import java.io.*;
  *
  * @author gaigeshen
  */
-public class FileUploadItem extends UploadItem {
+public class FileUploadItem extends AbatractUploadItem {
   private final byte[] overrideContent;
   public FileUploadItem(String filename, File file) {
     super(filename, null);

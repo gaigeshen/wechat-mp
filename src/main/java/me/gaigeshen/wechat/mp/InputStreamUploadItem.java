@@ -11,7 +11,7 @@ import java.io.InputStream;
  *
  * @author gaigeshen
  */
-public class InputStreamUploadItem extends UploadItem {
+public class InputStreamUploadItem extends AbatractUploadItem {
   private final byte[] overrideContent;
   public InputStreamUploadItem(String filename, InputStream in) {
     super(filename, null);

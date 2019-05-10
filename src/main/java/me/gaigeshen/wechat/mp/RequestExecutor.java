@@ -16,6 +16,7 @@ import org.apache.http.client.fluent.ContentResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -145,12 +146,17 @@ public class RequestExecutor implements Closeable {
             ? new HttpGet(replacePlaceholderForQueryString(requestUri))
             : new HttpPost(replacePlaceholderForQueryString(requestUri));
     if (httpMethod.equals(HttpMethod.POST)) {
+      if (request instanceof UploadItem) {
+        // 如果该请求直接是上传文件，则会忽略掉所有的普通字段，只关注上传文件
+        ((HttpPost) httpReq).setEntity(new ByteArrayEntity(((UploadItem) request).getContent()));
+        return httpReq;
+      }
       Field[] fields = FieldUtils.getAllFields(request.getClass());
       boolean uploadable = Stream.of(fields).anyMatch(f -> ClassUtils.isAssignable(f.getType(), UploadItem.class));
       if (!uploadable) {
         String entity = JsonUtils.toJson(request);
         ((HttpPost) httpReq).setEntity(new StringEntity(entity, "utf-8"));
-      } else {
+      } else { // 该请求的某个字段是需要上传文件的
         processUploadable(request, fields, (HttpPost) httpReq);
       }
     }
