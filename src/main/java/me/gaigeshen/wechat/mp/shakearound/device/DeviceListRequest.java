@@ -14,7 +14,7 @@ import java.util.Map;
 public class DeviceListRequest implements Request<DeviceListResponse> {
 
   @JSONField(name = "type")
-  private Integer type;
+  private int type;
 
   @JSONField(name = "device_identifier")
   private Map<String, Object> deviceIdentifier;
