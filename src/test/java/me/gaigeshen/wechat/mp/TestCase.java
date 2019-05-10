@@ -3,6 +3,7 @@ package me.gaigeshen.wechat.mp;
 import me.gaigeshen.wechat.mp.accesstoken.AccessTokenRequest;
 import me.gaigeshen.wechat.mp.accesstoken.AccessTokenResponse;
 import me.gaigeshen.wechat.mp.commons.HttpClientExecutor;
+import me.gaigeshen.wechat.mp.kefu.newapi.*;
 import me.gaigeshen.wechat.mp.menu.*;
 import me.gaigeshen.wechat.mp.sendall.ImageUploadRequest;
 import me.gaigeshen.wechat.mp.sendall.ImageUploadResponse;
@@ -43,7 +44,9 @@ public class TestCase {
 
   @After
   public void clean() throws IOException {
-    this.executor.close();
+    if (this.executor != null) {
+      this.executor.close();
+    }
   }
 
   @Test
@@ -265,5 +268,99 @@ public class TestCase {
     }, new StringResponseBodyPrintHandler());
   }
 
+
+
+  // ===================== 新版客服帐号测试 ==================================================
+  @Test
+  public void testKefuAddRequest() { // 添加客服帐号
+    KefuAddRequest request = KefuAddRequest.builder()
+            .account("ggs@hz-zkkj")
+            .nickname("ggskefu")
+            .build();
+    EmptyDataResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+  }
+
+  @Test
+  public void testKefuAvatarUploadRequest() { // 上传客服头像
+    KefuAvatarUploadRequest request = KefuAvatarUploadRequest.builder()
+            .account("ggs@hz-zkkj")
+            .media(new FileUploadItem("ggskefu.jpg",
+                    new File("C:\\Users\\gaigeshen\\Pictures\\Saved Pictures\\avatar.jpg")))
+            .build();
+    EmptyDataResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+  }
+
+  @Test
+  public void testKefuDeleteRequest() { // 删除客服帐号
+    KefuDeleteRequest request = KefuDeleteRequest.create("ggs@hz-zkkj");
+    EmptyDataResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+  }
+
+  @Test
+  public void testKefuInviteRequest() { // 邀请客服绑定
+    KefuInviteRequest request = KefuInviteRequest.builder()
+            .account("ggs@hz-zkkj")
+            .inviteWx("gaige_shen")
+            .build();
+    EmptyDataResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+  }
+
+  @Test
+  public void testKefuListRequest() { // 获取客服列表
+    KefuListRequest request = new KefuListRequest();
+    KefuListResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+    if (response.isSucceeded()) {
+      KefuListResponse.Kefu[] kefus = response.getKefus();
+      if (kefus != null) {
+        for (KefuListResponse.Kefu kefu : kefus) {
+          System.out.println("kefu account: " + kefu.getAccount());
+          System.out.println("kefu avatar: " + kefu.getHeadimgurl());
+          System.out.println("kefu id: " + kefu.getId());
+          System.out.println("kefu nick: " + kefu.getNick());
+          System.out.println("kefu wx: " + kefu.getWx());
+        }
+      }
+    }
+  }
+
+  @Test
+  public void testKefuOnlineListRequest() { // 获取在线客服列表
+    KefuOnlineListRequest request = new KefuOnlineListRequest();
+    KefuOnlineListResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+    if (response.isSucceeded()) {
+      KefuOnlineListResponse.Kefu[] kefus = response.getKefus();
+      if (kefus != null) {
+        for (KefuOnlineListResponse.Kefu kefu : kefus) {
+          System.out.println("kefu account: " + kefu.getAccount());
+          System.out.println("kefu id: " + kefu.getId());
+          System.out.println("kefu status: " + kefu.getStatus());
+          System.out.println("kefu acceptedCase: " + kefu.getAcceptedCase());
+        }
+      }
+    }
+  }
+
+  @Test
+  public void testKefuUpdateRequest() { // 更新客服
+    KefuUpdateRequest request = KefuUpdateRequest.builder()
+            .account("ggs@hz-zkkj")
+            .nickname("ggskefu_updated")
+            .build();
+    EmptyDataResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+  }
 }
 
