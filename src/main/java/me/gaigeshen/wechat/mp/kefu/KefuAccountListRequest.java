@@ -4,7 +4,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Builder;
 import lombok.Getter;
 import me.gaigeshen.wechat.mp.Request;
-import me.gaigeshen.wechat.mp.commons.HttpMethod;
 
 /**
  * 获取所有的客服帐号
@@ -13,22 +12,12 @@ import me.gaigeshen.wechat.mp.commons.HttpMethod;
  */
 @Getter
 @Builder
-public class KefuAccountListRequest implements Request<KefuAccountAddResponse> {
+public class KefuAccountListRequest implements Request<KefuAccountListResponse> {
   @JSONField(name = "kf_account")
   private String account;
 
   private String nickname;
   private String password;
-
-  @Override
-  public Class<KefuAccountAddResponse> responseType() {
-    return KefuAccountAddResponse.class;
-  }
-
-  @Override
-  public HttpMethod httpMethod() {
-    return HttpMethod.POST;
-  }
 
   @Override
   public String requestUri() {
