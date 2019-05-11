@@ -3,12 +3,18 @@ package me.gaigeshen.wechat.mp.message;
 import me.gaigeshen.wechat.mp.message.eventpush.*;
 
 /**
- * 消息类型定义枚举，包含所有的消息类型，有普通消息和事件消息
+ * 消息类型定义枚举，包含所有的消息类型，有普通消息和事件消息。
+ * 请不要将数据内容存在嵌套节点的消息定义在此处，如果有嵌套节点，将会处理为未定义的消息类型，嵌套多级消息节点解析为嵌套映射。
  *
  * @author gaigeshen
+ *
+ * @see KeyMappedMessage
  */
 public enum MessageTypeDeclarer {
 
+  /**
+   * 未定义的消息类型都认为此类型，支持嵌套数据节点的消息
+   */
   UNDEFINED("undefined", KeyMappedMessage.class),
 
   EVENT_CLICK("CLICK", ClickEventMessage.class),

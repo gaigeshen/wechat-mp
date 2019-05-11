@@ -1,9 +1,6 @@
 package me.gaigeshen.wechat.mp.message;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  *
@@ -14,7 +11,7 @@ import java.util.Set;
  */
 public class KeyMappedMessage implements Message, Map<String, Object> {
   private final Map<String, Object> map;
-  public KeyMappedMessage() { this.map = new HashMap<>(); }
+  public KeyMappedMessage() { this.map = new IdentityHashMap<>(); }
 
   @Override
   public int size() { return map.size(); }

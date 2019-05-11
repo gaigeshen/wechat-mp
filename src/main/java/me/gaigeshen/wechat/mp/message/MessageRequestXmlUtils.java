@@ -7,6 +7,9 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 
 import java.lang.reflect.Field;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -30,10 +33,7 @@ final class MessageRequestXmlUtils {
       throw new IllegalStateException("Could not create new response object: " + targetType, e);
     }
     if (response instanceof KeyMappedMessage) { // 未定义的消息类型
-      Element rootElement = document.getRootElement();
-      for (Element element : rootElement.elements()) {
-        ((KeyMappedMessage) response).put(element.getName(), element.getTextTrim());
-      }
+      processNestedKeyMappedMessage((KeyMappedMessage) response, document.getRootElement());
       return response;
     }
     Field[] fields = FieldUtils.getAllFields(targetType);
@@ -55,6 +55,28 @@ final class MessageRequestXmlUtils {
       assignFieldValue(field, response, node.getTextTrim());
     }
     return response;
+  }
+
+  /**
+   * 处理可能存在嵌套格式的消息
+   *
+   * @param properties 将会将消息内容数据放入此映射，如果存在嵌套数据，将会处理为嵌套的映射
+   * @param rootElement 消息根节点
+   */
+  private static void processNestedKeyMappedMessage(Map<String, Object> properties, Element rootElement) {
+    if (rootElement == null) {
+      return;
+    }
+    for (Element childElement : rootElement.elements()) {
+      List<Element> elements = childElement.elements();
+      if (elements.isEmpty()) { // 如果不存在子节点，则直接添加至映射
+        properties.put(childElement.getName() + "", childElement.getTextTrim());
+      } else { // 如果存在子节点，则继续处理子节点
+        Map<String, Object> props = new IdentityHashMap<>(elements.size());
+        processNestedKeyMappedMessage(props, childElement);
+        properties.put(childElement.getName() + "", props);
+      }
+    }
   }
 
   private static void assignFieldValue(Field field, Object target, String value) {
