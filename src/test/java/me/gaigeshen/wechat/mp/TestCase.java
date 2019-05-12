@@ -7,6 +7,7 @@ import me.gaigeshen.wechat.mp.kefu.newapi.*;
 import me.gaigeshen.wechat.mp.menu.*;
 import me.gaigeshen.wechat.mp.sendall.ImageUploadRequest;
 import me.gaigeshen.wechat.mp.sendall.ImageUploadResponse;
+import me.gaigeshen.wechat.mp.smart.ocr.*;
 import me.gaigeshen.wechat.mp.store.*;
 import me.gaigeshen.wechat.mp.store.miniapp.StoreMiniappCategoryRequest;
 import me.gaigeshen.wechat.mp.store.miniapp.StoreMiniappCategoryResponse;
@@ -361,6 +362,52 @@ public class TestCase {
     EmptyDataResponse response = executor.execute(request);
     System.out.println("error code: " + response.getErrorCode());
     System.out.println("error message: " + response.getErrorMessage());
+  }
+
+
+
+  // ===================== 智能接口测试 ==================================================
+
+  @Test
+  public void testBankCardReadRequest() {
+    BankCardReadRequest request = BankCardReadRequest.builder()
+            .img(new FileUploadItem("bank_card_abc.jpg",
+                    new File("C:\\Users\\gaigeshen\\Pictures\\Saved Pictures\\bank_card_abc.jpg")))
+            .build();
+    BankCardReadResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+    System.out.println("bank card number: " + response.getNumber());
+  }
+
+  @Test
+  public void testDrivingCardReadRequest() {
+    DrivingCardReadRequest request = DrivingCardReadRequest.builder()
+            .img(new FileUploadItem("driving_license.jpg",
+                    new File("C:\\Users\\gaigeshen\\Pictures\\Saved Pictures\\driving_license.jpg")))
+            .build();
+    DrivingCardReadResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+    System.out.println("vin: " + response.getVin());
+    System.out.println("plate no: " + response.getPlateNum());
+    System.out.println("engine no: " + response.getEngineNum());
+    System.out.println("vehicle type:  " + response.getVehicleType());
+  }
+
+  @Test
+  public void testIdCardReadRequest() { // 身份证识别，正反都可以
+    IdCardReadRequest request = IdCardReadRequest.builder()
+            .img(new FileUploadItem("id_card.jpg",
+                    new File("C:\\Users\\gaigeshen\\Pictures\\Saved Pictures\\id_card.jpg")))
+            .build();
+    IdCardReadResponse response = executor.execute(request);
+    System.out.println("error code: " + response.getErrorCode());
+    System.out.println("error message: " + response.getErrorMessage());
+    System.out.println("type: " + response.getType());
+    System.out.println("name: " + response.getName());
+    System.out.println("id: " + response.getId());
+    System.out.println("valid date: " + response.getValidDate());
   }
 }
 

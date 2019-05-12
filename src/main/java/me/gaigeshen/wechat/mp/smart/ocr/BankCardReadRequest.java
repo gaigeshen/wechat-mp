@@ -16,6 +16,6 @@ public class BankCardReadRequest implements Request<BankCardReadResponse> {
 
   @Override
   public String requestUri() {
-    return "http://api.weixin.qq.com/cv/ocr/bankcard?access_token=ACCESS_TOCKEN";
+    return "http://api.weixin.qq.com/cv/ocr/bankcard?access_token=ACCESS_TOKEN";
   }
 }

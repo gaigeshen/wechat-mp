@@ -16,6 +16,6 @@ public class IdCardReadRequest implements Request<IdCardReadResponse> {
 
   @Override
   public String requestUri() {
-    return "http://api.weixin.qq.com/cv/ocr/idcard?type=photo&access_token=ACCESS_TOCKEN";
+    return "http://api.weixin.qq.com/cv/ocr/idcard?type=photo&access_token=ACCESS_TOKEN";
   }
 }
