@@ -13,8 +13,11 @@ import me.gaigeshen.wechat.mp.AbstractResponse;
 public class IdCardReadResponse extends AbstractResponse {
 
   private String type;
-  @JSONField(name = "valid_date") private String validDate;
-  private String name;
+
   private String id;
+  private String name;
+  private String addr;
+
+  @JSONField(name = "valid_date") private String validDate;
 
 }
