@@ -2,15 +2,15 @@ package me.gaigeshen.wechat.mp.message;
 
 import me.gaigeshen.wechat.mp.Config;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.Validate;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 消息体加解密处理器，改造自微信加解密样例
@@ -20,6 +20,7 @@ import java.util.Arrays;
 final class MessageCodecProcessor {
   private final Config config;
   private final byte[] encodingAesKey;
+  private final Base64 base64;
 
   /**
    * 创建消息体加解密处理器
@@ -30,6 +31,7 @@ final class MessageCodecProcessor {
     Validate.notNull(config, "config is required");
     this.config = config;
     this.encodingAesKey = Base64.decodeBase64(config.getEncodingAesKey() + "=");
+    this.base64 = new Base64();
   }
 
   /**
@@ -76,15 +78,17 @@ final class MessageCodecProcessor {
       (byte) (bodyBytesLength >> 8 & 0xff),
       (byte) (bodyBytesLength & 0xff)
     };
-    byte[] appidBytes = config.getAppid().getBytes();
-    byte[] allBytes = concatBytes(random, networkBytes, bodyBytes, appidBytes);
+    ByteGroup byteGroup = new ByteGroup();
+    byteGroup.addBytes(random).addBytes(networkBytes).addBytes(bodyBytes)
+            .addBytes(config.getAppid().getBytes());
+    byte[] allBytes = byteGroup.toBytes();
     int padAmount = 32 - (allBytes.length % 32);
-    char padChr = (char) (padAmount & 0xff);
+    char padChr = (char) ((byte) (padAmount & 0xff));
     StringBuilder builder = new StringBuilder();
     for (int i = 0; i < padAmount; i++) {
       builder.append(padChr);
     }
-    byte[] finalBytes = ArrayUtils.addAll(allBytes, builder.toString().getBytes());
+    byte[] finalBytes = byteGroup.addBytes(builder.toString().getBytes()).toBytes();
     return encryptInternal(finalBytes, encodingAesKey);
   }
 
@@ -122,26 +126,31 @@ final class MessageCodecProcessor {
       IvParameterSpec iv = new IvParameterSpec(encodingAesKey, 0, 16);
       cipher.init(Cipher.ENCRYPT_MODE, keySpec, iv);
       byte[] encrypted = cipher.doFinal(bytes);
-      return new String(Base64.encodeBase64(encrypted), StandardCharsets.UTF_8);
+      return base64.encodeToString(encrypted);
     } catch (Exception e) {
       throw new IllegalStateException("Could not do encript", e);
     }
   }
 
   /**
-   * 连接多个字节数组
-   *
-   * @param bytesArray 多个字节数组，如果没有传递，则返回空数组
-   * @return 连接后的字节数组
+   * 用于组合字节数组
    */
-  private byte[] concatBytes(byte[]... bytesArray) {
-    if (bytesArray == null) {
-      return new byte[0];
+  private class ByteGroup {
+    private final List<Byte> bytes = new ArrayList<>();
+    ByteGroup addBytes(byte[] bytes) {
+      for (byte aByte : bytes) {
+        this.bytes.add(aByte);
+      }
+      return this;
     }
-    byte[] allBytes = null;
-    for (byte[] bytes : bytesArray) {
-      allBytes = ArrayUtils.addAll(allBytes, bytes);
+    byte[] toBytes() {
+      int bytesLength = bytes.size();
+      byte[] result = new byte[bytesLength];
+      for (int i = 0; i < bytesLength; i++) {
+        result[i] = bytes.get(i);
+      }
+      return result;
     }
-    return allBytes;
   }
+
 }

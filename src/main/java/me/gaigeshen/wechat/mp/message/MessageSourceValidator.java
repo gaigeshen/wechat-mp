@@ -32,5 +32,23 @@ public final class MessageSourceValidator {
     return DigestUtils.sha1Hex(builder.toString()).equals(signature);
   }
 
+  /**
+   * 计算消息体签名
+   *
+   * @param token 签名计算密钥
+   * @param timestamp 时间戳
+   * @param nonce 随机值
+   * @param messageBody 消息体
+   * @return 签名
+   */
+  public static String calculateMessageBodySignature(String token, String timestamp, String nonce, String messageBody) {
+    String[] arr = { token, timestamp, nonce, messageBody};
+    Arrays.sort(arr);
+    StringBuilder builder = new StringBuilder();
+    for (String str : arr) {
+      builder.append(str);
+    }
+    return DigestUtils.sha1Hex(builder.toString());
+  }
 }
 
