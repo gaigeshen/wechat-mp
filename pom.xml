@@ -127,6 +127,13 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <excludes>
+                    <exclude>config.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
