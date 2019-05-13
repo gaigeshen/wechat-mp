@@ -1,4 +1,9 @@
-### 微信公众号开发工具，还在开发当中，欢迎试用，可能会存在很多问题
+## 微信公众号开发工具，还在开发当中，欢迎试用，可能会存在很多问题
+[![License](http://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![Build Status](https://travis-ci.org/gaigeshen/wechat-mp.svg?branch=develop)](https://travis-ci.org/gaigeshen/wechat-mp)
+[![Maven Central](https://img.shields.io/maven-central/v/me.gaigeshen.wechat/wechat-mp.svg)](http://mvnrepository.com/artifact/me.gaigeshen.wechat/wechat-mp)
+[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/me.gaigeshen.wechat/wechat-mp.svg)](https://oss.sonatype.org/content/repositories/snapshots/me/gaigeshen/wechat/wechat-mp)
+[![GitHub last commit](https://img.shields.io/github/last-commit/gaigeshen/wechat-mp.svg)](https://github.com/gaigeshen/wechat-mp/commits)
 
 - 请求接口使用方式
 > 请注意，请求体数据和响应体数据都假定为`json`格式
