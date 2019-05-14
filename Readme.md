@@ -6,26 +6,30 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/gaigeshen/wechat-mp.svg)](https://github.com/gaigeshen/wechat-mp/commits)
 
 - 消息的处理，此处演示常用的配置案例
-> 以下配置完毕之后，在微信公众平台启用服务器配置，并且将服务器地址配置为指向`/messages`  
+> 以下配置完毕之后，在微信公众平台启用服务器配置，并且将服务器地址配置为指向`/messages`
 ```
-// 消息处理器链，会获取所有的消息处理器
-// 请根据需要合理选择消息处理器的抽象实现，具体查看源代码
-@Bean
-public MessageProcessorChain messageProcessorChain(ApplicationContext ctx) {
-  return new DefaultMessageProcessorChain(new ArrayList<>(ctx.getBeansOfType(MessageProcessor.class).values()));
-}
-
-// 读取微信的全局配置，配置的值要与微信公众平台上的服务器配置保持一致
-@Bean
-public Config wechatConfig() {
-  String appid = ...; 
-  String secret = ...;
-  String token = ...;
-  String encodingAesKey = ...; // 如果配置了该值的话，将会对消息进行加解密操作
-  Assert.state(StringUtils.isNotBlank(appid), "appid is required");
-  Assert.state(StringUtils.isNotBlank(secret), "secret is required");
-  Assert.state(StringUtils.isNotBlank(token), "token is required");
-  return Config.builder().appid(appid).secret(secret).token(token).encodingAesKey(encodingAesKey).build();
+@Configuration
+@ServletComponentScan(basePackageClasses = { ServletMessageFilter.class })
+public class WechatMpConfiguration {
+  // 消息处理器链，会获取所有的消息处理器
+  // 请根据需要合理选择消息处理器的抽象实现，具体查看源代码
+  @Bean
+  public MessageProcessorChain messageProcessorChain(ApplicationContext ctx) {
+    return new DefaultMessageProcessorChain(new ArrayList<>(ctx.getBeansOfType(MessageProcessor.class).values()));
+  }
+    
+  // 读取微信的全局配置，配置的值要与微信公众平台上的服务器配置保持一致
+  @Bean
+  public Config wechatConfig() {
+    String appid = ...; 
+    String secret = ...;
+    String token = ...;
+    String encodingAesKey = ...; // 如果配置了该值的话，将会对消息进行加解密操作
+    Assert.state(StringUtils.isNotBlank(appid), "appid is required");
+    Assert.state(StringUtils.isNotBlank(secret), "secret is required");
+    Assert.state(StringUtils.isNotBlank(token), "token is required");
+    return Config.builder().appid(appid).secret(secret).token(token).encodingAesKey(encodingAesKey).build();
+  }
 }
 ```
 
