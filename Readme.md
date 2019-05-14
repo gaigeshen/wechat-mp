@@ -1,12 +1,56 @@
-## 微信公众号开发工具，还在开发当中，欢迎试用，可能会存在很多问题
+## 微信公众号开发工具
 [![License](http://img.shields.io/:license-apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 [![Build Status](https://travis-ci.org/gaigeshen/wechat-mp.svg?branch=develop)](https://travis-ci.org/gaigeshen/wechat-mp)
 [![Maven Central](https://img.shields.io/maven-central/v/me.gaigeshen.wechat/wechat-mp.svg)](http://mvnrepository.com/artifact/me.gaigeshen.wechat/wechat-mp)
 [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/me.gaigeshen.wechat/wechat-mp.svg)](https://oss.sonatype.org/content/repositories/snapshots/me/gaigeshen/wechat/wechat-mp)
 [![GitHub last commit](https://img.shields.io/github/last-commit/gaigeshen/wechat-mp.svg)](https://github.com/gaigeshen/wechat-mp/commits)
 
+- 消息的处理，此处演示常用的配置案例
+> 以下配置完毕之后，在微信公众平台启用服务器配置，并且将服务器地址配置为指向`/messages`  
+```
+// 消息处理器链，会获取所有的消息处理器
+// 请根据需要合理选择消息处理器的抽象实现，具体查看源代码
+@Bean
+public MessageProcessorChain messageProcessorChain(ApplicationContext ctx) {
+  return new DefaultMessageProcessorChain(new ArrayList<>(ctx.getBeansOfType(MessageProcessor.class).values()));
+}
+
+// 读取微信的全局配置，配置的值要与微信公众平台上的服务器配置保持一致
+@Bean
+public Config wechatConfig() {
+  String appid = ...; 
+  String secret = ...;
+  String token = ...;
+  String encodingAesKey = ...; // 如果配置了该值的话，将会对消息进行加解密操作
+  Assert.state(StringUtils.isNotBlank(appid), "appid is required");
+  Assert.state(StringUtils.isNotBlank(secret), "secret is required");
+  Assert.state(StringUtils.isNotBlank(token), "token is required");
+  return Config.builder().appid(appid).secret(secret).token(token).encodingAesKey(encodingAesKey).build();
+}
+```
+
+
 - 请求接口使用方式
 > 请注意，请求体数据和响应体数据都假定为`json`格式
+```
+// 卡券签名相关，如果需要开发卡券业务的话
+@Bean
+public CardSignatureCalculator cardSignatureCalculator(RequestExecutor executor) {
+  return new CardSignatureCalculator(executor);
+}
+
+// 网页开发相关，如果需要开发网页授权之类的业务的话
+@Bean
+public JsApiSignatureCalculator jsApiSignatureCalculator(RequestExecutor executor) {
+  return new JsApiSignatureCalculator(executor);
+}
+
+// 此对象将用于主动请求接口
+@Bean(destroyMethod = "close")
+public RequestExecutor wechatRequestExecutor(Config config) {
+  return new RequestExecutor(new HttpClientExecutor(2000, 2000, 3000), config);
+}
+```
 ```
 // 构造请求对象
 XXXRequest req = ...
