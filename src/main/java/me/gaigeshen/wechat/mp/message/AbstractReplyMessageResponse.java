@@ -22,10 +22,10 @@ public abstract class AbstractReplyMessageResponse implements ReplyMessageRespon
   // 回复加密消息的时候，就是这种格式
   private static final String ENCRYPTED_MESSAGE_REPLY_CONTENT = "" +
           "<xml>" +
-          "<Encrypt><![CDATA[%s]]</Encrypt>" +
-          "<MsgSignature><![CDATA[%s]]</MsgSignature>" +
-          "<TimeStamp><![CDATA[%s]]</TimeStamp>" +
-          "<Nonce><![CDATA[%s]]</Nonce>" +
+          "<Encrypt><![CDATA[%s]]></Encrypt>" +
+          "<MsgSignature><![CDATA[%s]]></MsgSignature>" +
+          "<TimeStamp><![CDATA[%s]]></TimeStamp>" +
+          "<Nonce><![CDATA[%s]]></Nonce>" +
           "</xml>";
 
   private final Config config;
