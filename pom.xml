@@ -184,25 +184,17 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>external.atlassian.jgitflow</groupId>
-                <artifactId>jgitflow-maven-plugin</artifactId>
-                <version>1.0-m5.1</version>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>1.12.0</version>
                 <configuration>
-                    <arguments>-DskipTests</arguments>
-                    <noReleaseBuild>true</noReleaseBuild>
-                    <noHotfixBuild>true</noHotfixBuild>
-                    <noDeploy>true</noDeploy>
-                    <pushReleases>true</pushReleases>
-                    <useReleaseProfile>true</useReleaseProfile>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <flowInitContext>
-                        <masterBranchName>master</masterBranchName>
-                        <developBranchName>develop</developBranchName>
-                        <featureBranchPrefix>feature/</featureBranchPrefix>
-                        <releaseBranchPrefix>release/</releaseBranchPrefix>
-                        <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
+                    <gitFlowConfig>
                         <versionTagPrefix>v</versionTagPrefix>
-                    </flowInitContext>
+                    </gitFlowConfig>
+                    <versionDigitToIncrement>1</versionDigitToIncrement>
+                    <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
+                    <releaseRebase>true</releaseRebase>
+                    <skipTestProject>true</skipTestProject>
                 </configuration>
             </plugin>
         </plugins>
