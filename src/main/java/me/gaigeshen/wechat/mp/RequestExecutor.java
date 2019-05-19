@@ -1,8 +1,8 @@
 package me.gaigeshen.wechat.mp;
 
 import lombok.extern.slf4j.Slf4j;
-import me.gaigeshen.wechat.mp.accesstoken.AccessTokenRequest;
-import me.gaigeshen.wechat.mp.accesstoken.AccessTokenResponse;
+import me.gaigeshen.wechat.mp.accesstoken.AccessTokenCache;
+import me.gaigeshen.wechat.mp.accesstoken.InMemoryAccessTokenCache;
 import me.gaigeshen.wechat.mp.commons.HttpClientExecutor;
 import me.gaigeshen.wechat.mp.commons.HttpMethod;
 import me.gaigeshen.wechat.mp.commons.JsonUtils;
@@ -37,70 +37,24 @@ import java.util.stream.Stream;
 @Slf4j
 public class RequestExecutor implements Closeable {
 
-  private static final ContentResponseHandler RESPONSE_HANDLER = new ContentResponseHandler();
-
-  private final HttpClientExecutor executor;
   private final Config config;
-
-  private String accessToken;
-  private long accessTokenExpiresAtTimestamp;
+  private final HttpClientExecutor executor;
+  private final AccessTokenCache accessTokenCache;
 
   /**
    * 创建请求执行器
    */
   public RequestExecutor(HttpClientExecutor executor, Config config) {
-    this.executor = executor;
+    Validate.notNull(executor, "executor");
+    Validate.notNull(config, "config");
     this.config = config;
-    initializeAccessToken();
+    this.executor = executor;
+    this.accessTokenCache = new InMemoryAccessTokenCache(this);
   }
 
   @Override
   public void close() throws IOException {
     executor.close();
-  }
-
-  /**
-   * 初始化访问令牌
-   */
-  private void initializeAccessToken() {
-    log.debug("Initialize access token ...");
-    refreshAccessToken(true);
-  }
-
-  /**
-   * 刷新访问令牌
-   *
-   * @param force 是否强制刷新，在非强制刷新情况下会判断是否过期，如未过期则不会刷新
-   */
-  private synchronized void refreshAccessToken(boolean force) {
-    long currentTimestamp = System.currentTimeMillis();
-    if (!force && currentTimestamp < accessTokenExpiresAtTimestamp) {
-      return;
-    }
-    AccessTokenResponse resp = execute(new AccessTokenRequest());
-    if (resp.isSucceeded()) {
-      accessToken = resp.getAccessToken();
-      // 过期时间往前推移五秒钟，考虑请求访问令牌的时间
-      accessTokenExpiresAtTimestamp = currentTimestamp + (resp.getExpiresIn() * 1000 - 5000);
-      log.debug("Access token refresh succeeded");
-    } else {
-      log.debug("Access token refresh failed: " + resp.getErrorMessage());
-      throw new IllegalStateException("Could not refresh access token, because " + resp.getErrorMessage());
-    }
-  }
-
-  /**
-   * 获取当前有效的访问令牌
-   *
-   * @return 有效的访问令牌，如果过期会进行刷新操作
-   */
-  private String currentAccessToken() {
-    long currentTimestamp = System.currentTimeMillis();
-    if (currentTimestamp >= accessTokenExpiresAtTimestamp) {
-      log.debug("Try to refresh the access token");
-      refreshAccessToken(false);
-    }
-    return accessToken;
   }
 
   /**
@@ -114,7 +68,8 @@ public class RequestExecutor implements Closeable {
    */
   public <R extends Response> R execute(Request<R> request) {
     HttpUriRequest httpReq = buildRequest(request);
-    String result = executor.execute(httpReq, RESPONSE_HANDLER).asString(Charset.forName("utf-8"));
+    String result = executor.execute(httpReq, new ContentResponseHandler())
+            .asString(Charset.forName("utf-8"));
     logRequestAndResponse(httpReq, result);
     return JsonUtils.fromJson(result, request.responseType());
   }
@@ -130,7 +85,7 @@ public class RequestExecutor implements Closeable {
   public void execute(Request<?> request, ResponseBodyHandler handler) {
     Validate.notNull(handler, "handler is required");
     HttpUriRequest httpReq = buildRequest(request);
-    Content content = executor.execute(httpReq, RESPONSE_HANDLER);
+    Content content = executor.execute(httpReq, new ContentResponseHandler());
     logRequestAndResponse(httpReq, null);
     handler.handle(content.getType().toString(), content.asBytes());
   }
@@ -223,10 +178,13 @@ public class RequestExecutor implements Closeable {
    * @return 替换占位符后的请求链接
    */
   private String replacePlaceholderForQueryString(String uri) {
+    // 这里需要做判断，如果存在访问令牌变量则执行替换操作
+    // 否则可能会造成无限循环调用
+    // 因为获取当前有效的访问令牌那个方法内部也会最终调用到本方法
     if (StringUtils.contains(uri, "ACCESS_TOKEN")) {
       // 如果请求链接里需要访问令牌参数
       // 则带上当前有效的访问令牌
-      uri = uri.replaceAll("ACCESS_TOKEN", currentAccessToken());
+      uri = uri.replaceAll("ACCESS_TOKEN", accessTokenCache.currentValidAccessToken());
     }
     return uri.replaceAll("APPID", config.getAppid()).replaceAll("SECRET", config.getSecret());
   }
